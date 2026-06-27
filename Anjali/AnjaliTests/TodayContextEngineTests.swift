@@ -14,7 +14,8 @@ final class TodayContextEngineTests: XCTestCase {
         needsReview: Bool = false,
         isReviewed: Bool = true,
         featured: Bool = false,
-        sortOrder: Int = 0
+        sortOrder: Int = 0,
+        rotationPolicy: RotationPolicy = .rotateOften
     ) -> Prayer {
         Prayer(
             id: id, title: id, deity: deity, moments: moments,
@@ -22,7 +23,7 @@ final class TodayContextEngineTests: XCTestCase {
             availableModes: modes, primaryText: PrayerText(devanagari: "ॐ"),
             transliteration: "Oṃ", meaning: "m", sourceTitle: "s",
             audioAssetName: nil, isReviewed: isReviewed, needsReview: needsReview,
-            isFeatured: featured, sortOrder: sortOrder
+            isFeatured: featured, sortOrder: sortOrder, rotationPolicy: rotationPolicy
         )
     }
 
@@ -53,10 +54,18 @@ final class TodayContextEngineTests: XCTestCase {
         XCTAssertEqual(context.selectedPrayer?.id, "sleep")
     }
 
+    func testMiddaySelectsMiddayPrayer() {
+        let middayPrayer = prayer("midday", moments: [.meeting], timeContexts: [.midday])
+        let dawnPrayer = prayer("dawn", moments: [.dawn], timeContexts: [.dawn])
+        let input = TodayEngineInput(prayers: [dawnPrayer, middayPrayer], timeContext: .midday)
+        let context = TodayContextEngine.makeContext(input: input)
+        XCTAssertEqual(context.selectedPrayer?.id, "midday")
+        XCTAssertEqual(context.timeContext, .midday)
+    }
+
     // MARK: Preferred deity ranking
 
     func testPreferredDeityIsRankedHigher() {
-        // Two prayers identical except deity; both match the time band.
         let shivaP = prayer("shiva", deity: .shiva, timeContexts: [.morning])
         let ganeshaP = prayer("ganesha", deity: .ganesha, timeContexts: [.morning])
         let input = TodayEngineInput(
@@ -68,25 +77,92 @@ final class TodayContextEngineTests: XCTestCase {
         XCTAssertEqual(context.selectedPrayer?.id, "ganesha")
     }
 
-    // MARK: Recently-completed deprioritisation
+    // MARK: Recency penalties
 
-    func testRecentlyCompletedIsDeprioritised() {
+    func testRecencyPenaltyValuesForNormalRotation() {
+        let policy = RotationPolicy.rotateOften
+        XCTAssertEqual(TodayContextEngine.recencyPenalty(.thisSession, policy: policy), -90)
+        XCTAssertEqual(TodayContextEngine.recencyPenalty(.earlierToday, policy: policy), -60)
+        XCTAssertEqual(TodayContextEngine.recencyPenalty(.yesterday, policy: policy), -20)
+        XCTAssertEqual(TodayContextEngine.recencyPenalty(.withinThreeDays, policy: policy), -10)
+        XCTAssertEqual(TodayContextEngine.recencyPenalty(.longAgoOrNever, policy: policy), 0)
+    }
+
+    func testEarlierTodayIsDeprioritised() {
         let a = prayer("a", moments: [.dawn], timeContexts: [.dawn], sortOrder: 0)
         let b = prayer("b", moments: [.dawn], timeContexts: [.dawn], sortOrder: 1)
-        // Without completions, "a" wins on sortOrder tie-break.
+        // Without recency, "a" wins on sortOrder tie-break.
         let baseline = TodayContextEngine.makeContext(
             input: TodayEngineInput(prayers: [a, b], timeContext: .dawn)
         )
         XCTAssertEqual(baseline.selectedPrayer?.id, "a")
 
-        // Marking "a" completed today should push "b" ahead.
+        // Completing "a" earlier today should push "b" ahead.
         let input = TodayEngineInput(
             prayers: [a, b],
             timeContext: .dawn,
-            completedPrayerIDsToday: ["a"]
+            completionRecency: ["a": .earlierToday]
         )
         let context = TodayContextEngine.makeContext(input: input)
         XCTAssertEqual(context.selectedPrayer?.id, "b")
+    }
+
+    func testThisSessionIsStrongerThanEarlierToday() {
+        let a = prayer("a", moments: [.dawn], timeContexts: [.dawn], sortOrder: 0)
+        let b = prayer("b", moments: [.dawn], timeContexts: [.dawn], sortOrder: 1)
+        // "a" completed this session (-90) should fall below "b" completed
+        // merely earlier today (-60).
+        let input = TodayEngineInput(
+            prayers: [a, b],
+            timeContext: .dawn,
+            completionRecency: ["a": .thisSession, "b": .earlierToday]
+        )
+        let context = TodayContextEngine.makeContext(input: input)
+        XCTAssertEqual(context.selectedPrayer?.id, "b")
+    }
+
+    func testCompletionNeverExcludes() {
+        // Even completed this session, a sole prayer is still selectable.
+        let only = prayer("only", moments: [.dawn], timeContexts: [.dawn])
+        let input = TodayEngineInput(
+            prayers: [only],
+            timeContext: .dawn,
+            completionRecency: ["only": .thisSession]
+        )
+        XCTAssertEqual(TodayContextEngine.makeContext(input: input).selectedPrayer?.id, "only")
+    }
+
+    // MARK: Rotation policy
+
+    func testDailyAnchorWaivesYesterdayPenalty() {
+        XCTAssertEqual(TodayContextEngine.recencyPenalty(.yesterday, policy: .dailyAnchor), 0)
+        XCTAssertEqual(TodayContextEngine.recencyPenalty(.yesterday, policy: .rotateOften), -20)
+    }
+
+    func testDailyAnchorReturnsAfterYesterdayDespiteWorseTieBreak() {
+        // anchor has a *worse* sortOrder, so if it still wins it's because its
+        // yesterday penalty was waived while the normal prayer's was not.
+        let anchor = prayer(
+            "anchor", moments: [.dawn], timeContexts: [.dawn],
+            sortOrder: 5, rotationPolicy: .dailyAnchor
+        )
+        let normal = prayer(
+            "normal", moments: [.dawn], timeContexts: [.dawn],
+            sortOrder: 0, rotationPolicy: .rotateOften
+        )
+        let input = TodayEngineInput(
+            prayers: [anchor, normal],
+            timeContext: .dawn,
+            completionRecency: ["anchor": .yesterday, "normal": .yesterday]
+        )
+        let context = TodayContextEngine.makeContext(input: input)
+        XCTAssertEqual(context.selectedPrayer?.id, "anchor")
+    }
+
+    func testDailyAnchorStillPenalisedSameDay() {
+        // The waiver is only for "yesterday" — same-day completions still apply.
+        XCTAssertEqual(TodayContextEngine.recencyPenalty(.earlierToday, policy: .dailyAnchor), -60)
+        XCTAssertEqual(TodayContextEngine.recencyPenalty(.thisSession, policy: .dailyAnchor), -90)
     }
 
     // MARK: needsReview exclusion
@@ -106,19 +182,20 @@ final class TodayContextEngineTests: XCTestCase {
         XCTAssertEqual(ranked.map(\.id), ["g"])
     }
 
-    func testPrayerWithNoModesIsExcluded() {
+    // MARK: Mode fallback (Fix 4) — never blocks a text-only prayer
+
+    func testPrayerWithNoModesIsStillSelectableInSilent() {
         let noModes = prayer("none", moments: [.dawn], timeContexts: [.dawn], modes: [])
-        let good = prayer("g", moments: [.dawn], timeContexts: [.dawn])
         let context = TodayContextEngine.makeContext(
-            input: TodayEngineInput(prayers: [noModes, good], timeContext: .dawn)
+            input: TodayEngineInput(prayers: [noModes], timeContext: .dawn)
         )
-        XCTAssertEqual(context.selectedPrayer?.id, "g")
+        XCTAssertEqual(context.selectedPrayer?.id, "none")
+        XCTAssertEqual(context.selectedPrayer?.playableModes, [.silent])
     }
 
     // MARK: Explicit moment override
 
     func testExplicitMomentOverridesTimeBand() {
-        // It's morning, but the user explicitly chose Travel.
         let travel = prayer("travel", moments: [.travel], timeContexts: [.dawn])
         let morning = prayer("morning", moments: [.beforeWork], timeContexts: [.morning])
         let input = TodayEngineInput(
@@ -130,8 +207,6 @@ final class TodayContextEngineTests: XCTestCase {
         XCTAssertEqual(context.selectedPrayer?.id, "travel")
         XCTAssertEqual(context.moment, .travel)
     }
-
-    // MARK: Scoring weights
 
     func testExplicitMomentScoresHigherThanInferred() {
         let explicit = prayer("e", moments: [.travel])
@@ -147,13 +222,14 @@ final class TodayContextEngineTests: XCTestCase {
         )
     }
 
+    // MARK: Misc
+
     func testEmptyLibraryYieldsNoSelection() {
         let context = TodayContextEngine.makeContext(
             input: TodayEngineInput(prayers: [], timeContext: .dawn)
         )
         XCTAssertNil(context.selectedPrayer)
         XCTAssertTrue(context.alternatePrayers.isEmpty)
-        // Theme/copy is still well-formed.
         XCTAssertFalse(context.headline.isEmpty)
     }
 

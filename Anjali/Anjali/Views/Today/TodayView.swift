@@ -15,22 +15,46 @@ struct TodayView: View {
 
     private var context: TodayContext {
         let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: now)
-        let completedToday = Set(
-            completions
-                .filter { $0.completedAt >= startOfDay }
-                .map(\.prayerID)
-        )
-
         let input = TodayEngineInput(
             prayers: library.prayers,
             timeContext: TimeBandResolver.timeContext(for: now, calendar: calendar),
             explicitMoment: nil,
             preferredDeity: settings.ishtaDevata,
             preferredMoments: settings.favoriteMoments,
-            completedPrayerIDsToday: completedToday
+            completionRecency: buildRecency(now: now, calendar: calendar)
         )
         return TodayContextEngine.makeContext(input: input)
+    }
+
+    /// Bucket each prayer's most recent completion into a `CompletionRecency`.
+    /// Prayers completed during this session are marked `.thisSession`.
+    private func buildRecency(now: Date, calendar: Calendar) -> [String: CompletionRecency] {
+        var latest: [String: Date] = [:]
+        for completion in completions {
+            if let existing = latest[completion.prayerID] {
+                if completion.completedAt > existing { latest[completion.prayerID] = completion.completedAt }
+            } else {
+                latest[completion.prayerID] = completion.completedAt
+            }
+        }
+
+        let today = calendar.startOfDay(for: now)
+        var result: [String: CompletionRecency] = [:]
+        for (id, date) in latest {
+            let completedDay = calendar.startOfDay(for: date)
+            let days = calendar.dateComponents([.day], from: completedDay, to: today).day ?? 0
+            switch days {
+            case ..<1:        result[id] = .earlierToday   // today (or clock skew)
+            case 1:           result[id] = .yesterday
+            case 2, 3:        result[id] = .withinThreeDays
+            default:          result[id] = .longAgoOrNever
+            }
+        }
+        // Session completions are the strongest, most recent signal.
+        for id in coordinator.sessionCompletedPrayerIDs {
+            result[id] = .thisSession
+        }
+        return result
     }
 
     var body: some View {

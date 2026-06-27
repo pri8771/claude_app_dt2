@@ -28,7 +28,7 @@ struct PrayerCardView: View {
 
             // Available modes for this prayer.
             HStack(spacing: 8) {
-                ForEach(prayer.availableModes) { mode in
+                ForEach(prayer.playableModes) { mode in
                     InfoChip(text: mode.displayName, systemImage: mode.symbolName, tint: theme.foreground.opacity(0.9))
                 }
             }

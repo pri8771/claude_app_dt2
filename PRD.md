@@ -33,7 +33,7 @@ at sunset, before sleep.
 2. **Three tabs:** Today, Moments, Me. Exactly three. No more.
 3. **Today**
    - A single contextual prayer card.
-   - Background and copy change by time band: Dawn, Morning, Sunset, Night.
+   - Background and copy change by time band: Dawn, Morning, Midday, Sunset, Night.
    - Card: eyebrow label, headline, prayer title, duration chip, mode chips
      (Listen/Chant/Silent), meaning, and a **Begin** CTA.
    - Selection is deterministic via `TodayContextEngine`.
@@ -87,12 +87,26 @@ at sunset, before sleep.
 | Time contexts include the current band | +35 |
 | Deity matches the user's ishta devata | +40 |
 | Needs review | −100 |
-| Already completed today | −50 |
-| No available mode | −1000 |
 
-`needsReview`, unreviewed, and mode-less prayers are additionally **hard-excluded**
-from candidacy, so they can never surface. Ties break by featured → sortOrder →
-id, for stable, reproducible output.
+**Recency penalties** (a completion *deprioritises*, never excludes — same-day
+repetition is discouraged, next-day repetition is allowed):
+
+| Last completed | Score |
+| --- | --- |
+| This session (unless the user tapped Repeat) | −90 |
+| Earlier today | −60 |
+| Yesterday | −20 *(waived for `.dailyAnchor` prayers)* |
+| Within the last 3 days | −10 |
+| 4+ days ago, or never | 0 |
+
+Each prayer carries a **`RotationPolicy`**: `.dailyAnchor` (returns daily —
+Gayatri, Om Shanti, a simple Ganesha invocation, the evening close),
+`.rotateOften` (default), `.occasional`, `.festivalSpecific` (reserved).
+
+Only `needsReview`/unreviewed prayers are **hard-excluded** from candidacy.
+Every other prayer is always completable (at minimum in Silent), so missing
+audio or modes never excludes it. Ties break by featured → sortOrder → id, for
+stable, reproducible output.
 
 ## V2 ideas (explicitly out of MVP)
 

@@ -20,7 +20,8 @@ struct PrayerPlayerView: View {
 
     init(prayer: Prayer) {
         self.prayer = prayer
-        let initialMode = prayer.availableModes.first ?? .silent
+        // Always completable: falls back to Silent if no modes are listed.
+        let initialMode = prayer.playableModes.first ?? .silent
         _mode = State(initialValue: initialMode)
         _controller = StateObject(wrappedValue: PlayerController(prayer: prayer, mode: initialMode))
     }
@@ -118,7 +119,7 @@ struct PrayerPlayerView: View {
 
     private var modePicker: some View {
         HStack(spacing: 10) {
-            ForEach(prayer.availableModes) { available in
+            ForEach(prayer.playableModes) { available in
                 ModeChip(mode: available, isSelected: available == mode, theme: theme) {
                     mode = available
                     controller.setMode(available)
@@ -153,12 +154,14 @@ struct PrayerPlayerView: View {
     }
 
     private func finishAndClose() {
+        coordinator.noteSessionCompletion(prayer.id)
         controller.stop()
         coordinator.dismissPlayer()
         dismiss()
     }
 
     private func repeatPrayer() {
+        // The user explicitly wants this prayer again — do not deprioritise it.
         withAnimation { showCompletion = false }
         controller.reset()
         controller.start()
@@ -175,6 +178,7 @@ struct PrayerPlayerView: View {
             modelContext.insert(FavoritePrayer(prayerID: id, savedAt: Date()))
             try? modelContext.save()
         }
+        coordinator.noteSessionCompletion(id)
         controller.stop()
         coordinator.dismissPlayer()
         dismiss()

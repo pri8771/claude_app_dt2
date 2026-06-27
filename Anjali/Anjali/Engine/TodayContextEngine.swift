@@ -2,19 +2,24 @@ import Foundation
 
 /// Deterministic engine that selects the single prayer to surface on Today.
 ///
-/// Scoring (per the product spec):
+/// Positive signals:
 /// - `+100` the prayer matches an **explicitly** chosen moment
 /// - `+60`  the prayer matches an **inferred** moment (from the time band or a
 ///          favourited moment)
 /// - `+35`  the prayer's time contexts include the current band
 /// - `+40`  the prayer's deity matches the user's preferred (ishta) deity
-/// - `-100` the prayer needs review
-/// - `-50`  the prayer was already completed today
-/// - `-1000` the prayer has no available mode (cannot be experienced)
 ///
-/// `needsReview` and mode-less prayers are also **hard-excluded** from
-/// candidacy so they can never be selected — satisfying the acceptance
-/// criteria — while the penalties keep scoring honest for any borderline data.
+/// Recency penalties (a completion never *excludes* a prayer — it only nudges
+/// it down so the day feels fresh, while tomorrow's repetition is allowed):
+/// - `-90` completed this session (unless the user tapped Repeat)
+/// - `-60` completed earlier today
+/// - `-20` completed yesterday — **waived for `.dailyAnchor` prayers**
+/// - `-10` completed within the last 3 days
+/// - `0`   completed 4+ days ago, or never
+///
+/// `needsReview` / unreviewed prayers are **hard-excluded** from candidacy so
+/// they can never be selected. Every eligible prayer is completable (at minimum
+/// in Silent), so the absence of audio or modes never excludes it.
 enum TodayContextEngine {
 
     // Scoring weights, exposed for tests and clarity.
@@ -23,8 +28,12 @@ enum TodayContextEngine {
     static let timeContextBonus = 35
     static let preferredDeityBonus = 40
     static let needsReviewPenalty = -100
-    static let completedTodayPenalty = -50
-    static let unavailableModePenalty = -1000
+
+    // Recency penalties.
+    static let thisSessionPenalty = -90
+    static let earlierTodayPenalty = -60
+    static let yesterdayPenalty = -20
+    static let withinThreeDaysPenalty = -10
 
     /// Build the full Today context for the screen.
     static func makeContext(input: TodayEngineInput) -> TodayContext {
@@ -96,14 +105,27 @@ enum TodayContextEngine {
             score += needsReviewPenalty
         }
 
-        if input.completedPrayerIDsToday.contains(prayer.id) {
-            score += completedTodayPenalty
-        }
-
-        if prayer.availableModes.isEmpty {
-            score += unavailableModePenalty
-        }
+        let recency = input.completionRecency[prayer.id] ?? .longAgoOrNever
+        score += recencyPenalty(recency, policy: prayer.rotationPolicy)
 
         return score
+    }
+
+    /// The deprioritisation for a given recency, softened for daily anchors.
+    static func recencyPenalty(_ recency: CompletionRecency, policy: RotationPolicy) -> Int {
+        switch recency {
+        case .thisSession:
+            return thisSessionPenalty
+        case .earlierToday:
+            return earlierTodayPenalty
+        case .yesterday:
+            // Daily anchors are meant to return each day, so we don't nudge
+            // them down for a completion the day before.
+            return policy == .dailyAnchor ? 0 : yesterdayPenalty
+        case .withinThreeDays:
+            return withinThreeDaysPenalty
+        case .longAgoOrNever:
+            return 0
+        }
     }
 }

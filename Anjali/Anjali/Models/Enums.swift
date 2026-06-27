@@ -3,10 +3,11 @@ import Foundation
 /// The four contextual time bands the app moves through across a day.
 /// Each band drives the visual theme and copy on the Today screen.
 enum TimeContext: String, Codable, CaseIterable, Identifiable, Hashable {
-    case dawn
-    case morning
-    case sunset
-    case night
+    case dawn       // 04:30–07:59
+    case morning    // 08:00–11:59
+    case midday     // 12:00–15:59
+    case sunset     // 16:00–19:59
+    case night      // 20:00–04:29
 
     var id: String { rawValue }
 
@@ -15,6 +16,7 @@ enum TimeContext: String, Codable, CaseIterable, Identifiable, Hashable {
         switch self {
         case .dawn: return "Dawn"
         case .morning: return "Morning"
+        case .midday: return "Midday"
         case .sunset: return "Sunset"
         case .night: return "Night"
         }
@@ -26,10 +28,25 @@ enum TimeContext: String, Codable, CaseIterable, Identifiable, Hashable {
         switch self {
         case .dawn: return [.dawn]
         case .morning: return [.beforeWork, .meeting, .study]
+        case .midday: return [.meeting, .study, .beforeWork]
         case .sunset: return [.sunset, .gratitude]
         case .night: return [.sleep]
         }
     }
+}
+
+/// How often a prayer should surface in the Today rotation. Lets the engine
+/// keep daily anchors present without letting everything repeat constantly.
+enum RotationPolicy: String, Codable, CaseIterable, Hashable {
+    /// Appears daily (e.g. Gayatri, Om Shanti, a simple Ganesha invocation,
+    /// the evening lamp). Recent-completion penalties are softened for these.
+    case dailyAnchor
+    /// Normal Today rotation — the default for most prayers.
+    case rotateOften
+    /// A special intention or less common use; surfaces less frequently.
+    case occasional
+    /// Only when explicitly relevant (festival/seasonal). Reserved for later.
+    case festivalSpecific
 }
 
 /// A "moment" is a situation in daily life a micro-prayer can accompany.

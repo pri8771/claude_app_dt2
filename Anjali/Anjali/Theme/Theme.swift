@@ -65,6 +65,15 @@ struct ThemePalette: Equatable {
                 subheadline: "A steady word for what's ahead.",
                 prefersDarkForeground: true
             )
+        case .midday:
+            return ThemePalette(
+                background: Color(hex: "FFF4DA"),
+                accent: Color(hex: "F29A24"),
+                eyebrow: "Speak with clarity",
+                headline: "A pause at midday",
+                subheadline: "Steady yourself in the middle of things.",
+                prefersDarkForeground: true
+            )
         case .sunset:
             return ThemePalette(
                 background: Color(hex: "5B1E2D"),

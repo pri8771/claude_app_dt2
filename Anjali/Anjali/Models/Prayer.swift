@@ -35,6 +35,8 @@ struct Prayer: Identifiable, Codable, Hashable {
     let needsReview: Bool
     let isFeatured: Bool
     let sortOrder: Int
+    /// How often this prayer should surface on Today. See `RotationPolicy`.
+    let rotationPolicy: RotationPolicy
 
     /// A short "10s" / "30s" label for the duration chip.
     var durationLabel: String {
@@ -46,9 +48,18 @@ struct Prayer: Identifiable, Codable, Hashable {
         return seconds == 0 ? "\(minutes)m" : "\(minutes)m \(seconds)s"
     }
 
-    /// A prayer is eligible to be shown when it has been reviewed, does not
-    /// need review, and can actually be experienced in at least one mode.
+    /// The modes a user can actually start. Every prayer is always completable
+    /// in Silent (read-only), so a prayer with no listed modes — or one whose
+    /// only modes depend on missing audio — still degrades gracefully rather
+    /// than blocking. Listen falls back to timed text when audio is absent.
+    var playableModes: [PlayMode] {
+        availableModes.isEmpty ? [.silent] : availableModes
+    }
+
+    /// A prayer is eligible to be shown when it has been reviewed and does not
+    /// need review. It is always completable (at minimum in Silent), so the
+    /// presence of modes/audio never excludes it.
     var isEligibleForToday: Bool {
-        isReviewed && !needsReview && !availableModes.isEmpty
+        isReviewed && !needsReview
     }
 }

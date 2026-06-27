@@ -18,6 +18,10 @@ final class AppCoordinator: ObservableObject {
     @Published var activePrayer: Prayer?
     /// A moment the user navigated into from a deep link / browse.
     @Published var pendingMoment: Moment?
+    /// Prayers completed during this app session (in-memory only). Used by the
+    /// Today engine to move the card along right after a completion. A prayer
+    /// the user chose to *Repeat* is intentionally not recorded here.
+    @Published var sessionCompletedPrayerIDs: Set<String> = []
 
     private unowned let library: PrayerLibrary
 
@@ -28,6 +32,12 @@ final class AppCoordinator: ObservableObject {
     /// Present the player for a prayer.
     func play(_ prayer: Prayer) {
         activePrayer = prayer
+    }
+
+    /// Record that a prayer was completed and dismissed in this session, so
+    /// Today moves on to something else. Call on Done / Save, not on Repeat.
+    func noteSessionCompletion(_ prayerID: String) {
+        sessionCompletedPrayerIDs.insert(prayerID)
     }
 
     func dismissPlayer() {

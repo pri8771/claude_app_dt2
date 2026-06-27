@@ -32,7 +32,7 @@ final class PrayerDataLoaderTests: XCTestCase {
             "availableModes": ["silent"], "primaryText": { "devanagari": "ॐ" },
             "transliteration": "Oṃ", "meaning": "Test", "sourceTitle": "Test",
             "audioAssetName": null, "isReviewed": true, "needsReview": false,
-            "isFeatured": false, "sortOrder": 1 },
+            "isFeatured": false, "sortOrder": 1, "rotationPolicy": "rotateOften" },
           { "id": "broken", "title": 12345 },
           "not even an object"
         ]
@@ -61,7 +61,7 @@ final class PrayerDataLoaderTests: XCTestCase {
             availableModes: modes, primaryText: PrayerText(devanagari: "ॐ"),
             transliteration: "Oṃ", meaning: "meaning", sourceTitle: "source",
             audioAssetName: nil, isReviewed: true, needsReview: false,
-            isFeatured: false, sortOrder: 0
+            isFeatured: false, sortOrder: 0, rotationPolicy: .rotateOften
         )
     }
 }

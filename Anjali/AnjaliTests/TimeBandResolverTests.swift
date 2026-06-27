@@ -13,14 +13,18 @@ final class TimeBandResolverTests: XCTestCase {
 
     func testMorningBoundaries() {
         XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(8, 0)), .morning)
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(10, 0)), .morning)
         XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(11, 59)), .morning)
-        // Midday folds into morning so there is no gap.
-        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(14, 0)), .morning)
-        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(16, 29)), .morning)
+    }
+
+    func testMiddayBoundaries() {
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(12, 0)), .midday)
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(14, 0)), .midday)
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(15, 59)), .midday)
     }
 
     func testSunsetBoundaries() {
-        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(16, 30)), .sunset)
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(16, 0)), .sunset)
         XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(18, 0)), .sunset)
         XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(19, 59)), .sunset)
     }
@@ -30,6 +34,13 @@ final class TimeBandResolverTests: XCTestCase {
         XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(23, 59)), .night)
         XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(0, 0)), .night)
         XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(4, 29)), .night)
+    }
+
+    func testEveryMinuteMapsToExactlyOneBand() {
+        // No gaps, no crashes across the whole day.
+        for m in 0..<(24 * 60) {
+            _ = TimeBandResolver.timeContext(forMinutesSinceMidnight: m)
+        }
     }
 
     func testResolvesFromDate() {

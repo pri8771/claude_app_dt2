@@ -3,12 +3,28 @@
     "id": "ganesha-gam",
     "title": "Om Gam Ganapataye Namah",
     "deity": "ganesha",
-    "moments": ["dawn", "leavingHome", "beforeWork"],
-    "intentions": ["focus", "protection"],
-    "timeContexts": ["dawn", "morning"],
+    "moments": [
+      "dawn",
+      "leavingHome",
+      "beforeWork"
+    ],
+    "intentions": [
+      "focus",
+      "protection"
+    ],
+    "timeContexts": [
+      "dawn",
+      "morning"
+    ],
     "durationSeconds": 12,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ गं गणपतये नमः" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ गं गणपतये नमः"
+    },
     "transliteration": "Oṃ Gaṃ Gaṇapataye Namaḥ",
     "meaning": "Salutations to Ganesha, remover of obstacles. A bija invocation to clear the way before beginning.",
     "sourceTitle": "Ganapati bija mantra (traditional)",
@@ -16,18 +32,34 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": true,
-    "sortOrder": 1
+    "sortOrder": 1,
+    "rotationPolicy": "dailyAnchor"
   },
   {
     "id": "ganesha-shri",
     "title": "Om Shri Ganeshaya Namah",
     "deity": "ganesha",
-    "moments": ["dawn", "leavingHome"],
-    "intentions": ["protection", "devotion"],
-    "timeContexts": ["dawn", "morning"],
+    "moments": [
+      "dawn",
+      "leavingHome"
+    ],
+    "intentions": [
+      "protection",
+      "devotion"
+    ],
+    "timeContexts": [
+      "dawn",
+      "morning"
+    ],
     "durationSeconds": 10,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ श्री गणेशाय नमः" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ श्री गणेशाय नमः"
+    },
     "transliteration": "Oṃ Śrī Gaṇeśāya Namaḥ",
     "meaning": "Salutations to revered Ganesha. A simple bow before stepping out into the day.",
     "sourceTitle": "Traditional Ganesha namaḥ mantra",
@@ -35,18 +67,35 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 2
+    "sortOrder": 2,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "ganesha-vakratunda",
     "title": "Vakratunda Mahakaya",
     "deity": "ganesha",
-    "moments": ["beforeWork", "meeting", "study"],
-    "intentions": ["focus", "courage"],
-    "timeContexts": ["morning"],
+    "moments": [
+      "beforeWork",
+      "meeting",
+      "study"
+    ],
+    "intentions": [
+      "focus",
+      "courage"
+    ],
+    "timeContexts": [
+      "morning",
+      "midday"
+    ],
     "durationSeconds": 30,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥"
+    },
     "transliteration": "Vakratuṇḍa mahākāya sūryakoṭi samaprabha,\nnirvighnaṃ kuru me deva sarvakāryeṣu sarvadā.",
     "meaning": "O curved-trunk, mighty one, radiant as countless suns — make all my endeavours free of obstacles, always.",
     "sourceTitle": "Ganesha dhyāna śloka (traditional Puranic invocation)",
@@ -54,18 +103,35 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 3
+    "sortOrder": 3,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "shiva-namah",
     "title": "Om Namah Shivaya",
     "deity": "shiva",
-    "moments": ["beforeWork", "sunset", "anxiety"],
-    "intentions": ["peace", "devotion"],
-    "timeContexts": ["morning", "sunset"],
+    "moments": [
+      "beforeWork",
+      "sunset",
+      "anxiety"
+    ],
+    "intentions": [
+      "peace",
+      "devotion"
+    ],
+    "timeContexts": [
+      "morning",
+      "sunset"
+    ],
     "durationSeconds": 15,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ नमः शिवाय" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ नमः शिवाय"
+    },
     "transliteration": "Oṃ Namaḥ Śivāya",
     "meaning": "I bow to Shiva, the auspicious one. The five-syllable mantra of surrender and stillness.",
     "sourceTitle": "Pañcākṣara mantra (Yajurveda / Śaiva tradition)",
@@ -73,18 +139,36 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": true,
-    "sortOrder": 4
+    "sortOrder": 4,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "shiva-mahamrityunjaya",
     "title": "Mahamrityunjaya Mantra",
     "deity": "shiva",
-    "moments": ["protection", "anxiety", "dawn"],
-    "intentions": ["protection", "peace", "courage"],
-    "timeContexts": ["dawn", "morning"],
+    "moments": [
+      "protection",
+      "anxiety",
+      "dawn"
+    ],
+    "intentions": [
+      "protection",
+      "peace",
+      "courage"
+    ],
+    "timeContexts": [
+      "dawn",
+      "morning"
+    ],
     "durationSeconds": 40,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्।\nउर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात्॥" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्।\nउर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात्॥"
+    },
     "transliteration": "Oṃ tryambakaṃ yajāmahe sugandhiṃ puṣṭivardhanam,\nurvārukam iva bandhanān mṛtyor mukṣīya māmṛtāt.",
     "meaning": "We worship the three-eyed one who nourishes all. As a ripe cucumber loosens from its stem, free us from death — not from immortality.",
     "sourceTitle": "Ṛgveda 7.59.12 (Mahāmṛtyuñjaya mantra)",
@@ -92,18 +176,34 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 5
+    "sortOrder": 5,
+    "rotationPolicy": "occasional"
   },
   {
     "id": "vishnu-narayana",
     "title": "Om Namo Narayanaya",
     "deity": "vishnu",
-    "moments": ["beforeWork", "gratitude"],
-    "intentions": ["peace", "devotion"],
-    "timeContexts": ["morning"],
+    "moments": [
+      "beforeWork",
+      "gratitude"
+    ],
+    "intentions": [
+      "peace",
+      "devotion"
+    ],
+    "timeContexts": [
+      "morning",
+      "midday"
+    ],
     "durationSeconds": 20,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ नमो नारायणाय" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ नमो नारायणाय"
+    },
     "transliteration": "Oṃ Namo Nārāyaṇāya",
     "meaning": "I bow to Narayana, the refuge of all beings. The eight-syllable mantra of trust.",
     "sourceTitle": "Nārāyaṇa Aṣṭākṣara mantra (traditional)",
@@ -111,18 +211,35 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 6
+    "sortOrder": 6,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "vishnu-shantakaram",
     "title": "Shantakaram Bhujagashayanam",
     "deity": "vishnu",
-    "moments": ["sleep", "gratitude", "sunset"],
-    "intentions": ["peace", "devotion"],
-    "timeContexts": ["sunset", "night"],
+    "moments": [
+      "sleep",
+      "gratitude",
+      "sunset"
+    ],
+    "intentions": [
+      "peace",
+      "devotion"
+    ],
+    "timeContexts": [
+      "sunset",
+      "night"
+    ],
     "durationSeconds": 30,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "शान्ताकारं भुजगशयनं पद्मनाभं सुरेशं\nविश्वाधारं गगनसदृशं मेघवर्णं शुभाङ्गम्॥" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "शान्ताकारं भुजगशयनं पद्मनाभं सुरेशं\nविश्वाधारं गगनसदृशं मेघवर्णं शुभाङ्गम्॥"
+    },
     "transliteration": "Śāntākāraṃ bhujagaśayanaṃ padmanābhaṃ sureśaṃ\nviśvādhāraṃ gaganasadṛśaṃ meghavarṇaṃ śubhāṅgam.",
     "meaning": "Serene of form, resting on the serpent, lotus-naveled lord of the gods — support of the universe, vast as the sky.",
     "sourceTitle": "Viṣṇu dhyāna śloka 'Śāntākāram' (traditional)",
@@ -130,18 +247,35 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 7
+    "sortOrder": 7,
+    "rotationPolicy": "occasional"
   },
   {
     "id": "krishna-vasudeva",
     "title": "Om Namo Bhagavate Vasudevaya",
     "deity": "krishna",
-    "moments": ["gratitude", "beforeWork"],
-    "intentions": ["devotion", "peace"],
-    "timeContexts": ["morning", "sunset"],
+    "moments": [
+      "gratitude",
+      "beforeWork"
+    ],
+    "intentions": [
+      "devotion",
+      "peace"
+    ],
+    "timeContexts": [
+      "morning",
+      "midday",
+      "sunset"
+    ],
     "durationSeconds": 20,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ नमो भगवते वासुदेवाय" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ नमो भगवते वासुदेवाय"
+    },
     "transliteration": "Oṃ Namo Bhagavate Vāsudevāya",
     "meaning": "I bow to Bhagavan Vasudeva (Krishna). The twelve-syllable mantra of loving remembrance.",
     "sourceTitle": "Vāsudeva Dvādaśākṣara mantra (Bhāgavata tradition)",
@@ -149,18 +283,34 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 8
+    "sortOrder": 8,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "krishna-mahamantra",
     "title": "Hare Krishna Maha Mantra",
     "deity": "krishna",
-    "moments": ["gratitude", "anxiety"],
-    "intentions": ["devotion", "peace"],
-    "timeContexts": ["morning", "sunset"],
+    "moments": [
+      "gratitude",
+      "anxiety"
+    ],
+    "intentions": [
+      "devotion",
+      "peace"
+    ],
+    "timeContexts": [
+      "morning",
+      "sunset"
+    ],
     "durationSeconds": 45,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे।\nहरे राम हरे राम राम राम हरे हरे॥" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे।\nहरे राम हरे राम राम राम हरे हरे॥"
+    },
     "transliteration": "Hare Kṛṣṇa Hare Kṛṣṇa, Kṛṣṇa Kṛṣṇa Hare Hare,\nHare Rāma Hare Rāma, Rāma Rāma Hare Hare.",
     "meaning": "A calling of the divine names of Krishna and Rama — the great mantra of remembrance.",
     "sourceTitle": "Mahā Mantra (Kali-Santaraṇa Upaniṣad)",
@@ -168,18 +318,35 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 9
+    "sortOrder": 9,
+    "rotationPolicy": "occasional"
   },
   {
     "id": "hanuman-namah",
     "title": "Om Hanumate Namah",
     "deity": "hanuman",
-    "moments": ["travel", "protection", "leavingHome"],
-    "intentions": ["protection", "courage"],
-    "timeContexts": ["dawn", "morning"],
+    "moments": [
+      "travel",
+      "protection",
+      "leavingHome"
+    ],
+    "intentions": [
+      "protection",
+      "courage"
+    ],
+    "timeContexts": [
+      "dawn",
+      "morning"
+    ],
     "durationSeconds": 15,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ हनुमते नमः" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ हनुमते नमः"
+    },
     "transliteration": "Oṃ Hanumate Namaḥ",
     "meaning": "Salutations to Hanuman, the fearless protector. A bow for courage on the road.",
     "sourceTitle": "Traditional Hanuman namaḥ mantra",
@@ -187,18 +354,34 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 10
+    "sortOrder": 10,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "hanuman-manojavam",
     "title": "Manojavam Marutatulyavegam",
     "deity": "hanuman",
-    "moments": ["travel", "protection", "anxiety"],
-    "intentions": ["courage", "protection"],
-    "timeContexts": ["morning"],
+    "moments": [
+      "travel",
+      "protection",
+      "anxiety"
+    ],
+    "intentions": [
+      "courage",
+      "protection"
+    ],
+    "timeContexts": [
+      "morning"
+    ],
     "durationSeconds": 30,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "मनोजवं मारुततुल्यवेगं जितेन्द्रियं बुद्धिमतां वरिष्ठम्।\nवातात्मजं वानरयूथमुख्यं श्रीरामदूतं शरणं प्रपद्ये॥" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "मनोजवं मारुततुल्यवेगं जितेन्द्रियं बुद्धिमतां वरिष्ठम्।\nवातात्मजं वानरयूथमुख्यं श्रीरामदूतं शरणं प्रपद्ये॥"
+    },
     "transliteration": "Manojavaṃ mārutatulyavegaṃ jitendriyaṃ buddhimatāṃ variṣṭham,\nvātātmajaṃ vānarayūthamukhyaṃ śrīrāmadūtaṃ śaraṇaṃ prapadye.",
     "meaning": "Swift as thought, fleet as the wind, master of the senses, wisest of the wise — to the son of the wind, Rama's messenger, I take refuge.",
     "sourceTitle": "Hanuman dhyāna śloka (Sundarakāṇḍa tradition)",
@@ -206,18 +389,36 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 11
+    "sortOrder": 11,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "saraswati-aim",
     "title": "Om Aim Saraswatyai Namah",
     "deity": "saraswati",
-    "moments": ["study", "meeting", "beforeWork"],
-    "intentions": ["clarity", "wisdom", "focus"],
-    "timeContexts": ["morning"],
+    "moments": [
+      "study",
+      "meeting",
+      "beforeWork"
+    ],
+    "intentions": [
+      "clarity",
+      "wisdom",
+      "focus"
+    ],
+    "timeContexts": [
+      "morning",
+      "midday"
+    ],
     "durationSeconds": 15,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ ऐं सरस्वत्यै नमः" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ ऐं सरस्वत्यै नमः"
+    },
     "transliteration": "Oṃ Aiṃ Sarasvatyai Namaḥ",
     "meaning": "Salutations to Saraswati, goddess of speech and learning. A bija invocation for clear thought.",
     "sourceTitle": "Sarasvatī bija mantra (traditional)",
@@ -225,18 +426,34 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 12
+    "sortOrder": 12,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "lakshmi-shrim",
     "title": "Om Shreem Mahalakshmyai Namah",
     "deity": "lakshmi",
-    "moments": ["beforeWork", "gratitude"],
-    "intentions": ["prosperity", "gratitude"],
-    "timeContexts": ["morning"],
+    "moments": [
+      "beforeWork",
+      "gratitude"
+    ],
+    "intentions": [
+      "prosperity",
+      "gratitude"
+    ],
+    "timeContexts": [
+      "morning",
+      "midday"
+    ],
     "durationSeconds": 15,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ श्रीं महालक्ष्म्यै नमः" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ श्रीं महालक्ष्म्यै नमः"
+    },
     "transliteration": "Oṃ Śrīṃ Mahālakṣmyai Namaḥ",
     "meaning": "Salutations to Mahalakshmi, source of abundance and grace. A bija invocation for steady well-being.",
     "sourceTitle": "Lakṣmī bija mantra (traditional)",
@@ -244,18 +461,36 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 13
+    "sortOrder": 13,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "devi-dum",
     "title": "Om Dum Durgayai Namah",
     "deity": "devi",
-    "moments": ["protection", "anxiety", "leavingHome"],
-    "intentions": ["protection", "courage"],
-    "timeContexts": ["dawn", "morning", "night"],
+    "moments": [
+      "protection",
+      "anxiety",
+      "leavingHome"
+    ],
+    "intentions": [
+      "protection",
+      "courage"
+    ],
+    "timeContexts": [
+      "dawn",
+      "morning",
+      "night"
+    ],
     "durationSeconds": 15,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ दुं दुर्गायै नमः" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ दुं दुर्गायै नमः"
+    },
     "transliteration": "Oṃ Duṃ Durgāyai Namaḥ",
     "meaning": "Salutations to Durga, the fierce and guarding mother. A bija invocation for protection.",
     "sourceTitle": "Durgā bija mantra (traditional)",
@@ -263,18 +498,35 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 14
+    "sortOrder": 14,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "devi-navarna",
     "title": "Navarna Mantra",
     "deity": "devi",
-    "moments": ["protection", "anxiety"],
-    "intentions": ["protection", "courage", "devotion"],
-    "timeContexts": ["dawn", "night"],
+    "moments": [
+      "protection",
+      "anxiety"
+    ],
+    "intentions": [
+      "protection",
+      "courage",
+      "devotion"
+    ],
+    "timeContexts": [
+      "dawn",
+      "night"
+    ],
     "durationSeconds": 20,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ ऐं ह्रीं क्लीं चामुण्डायै विच्चे" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ ऐं ह्रीं क्लीं चामुण्डायै विच्चे"
+    },
     "transliteration": "Oṃ Aiṃ Hrīṃ Klīṃ Cāmuṇḍāyai Vicce",
     "meaning": "The nine-syllable mantra of the Devi, invoking her threefold power of will, knowledge, and action.",
     "sourceTitle": "Navārṇa mantra (Devī Māhātmya / Chaṇḍī tradition)",
@@ -282,18 +534,34 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 15
+    "sortOrder": 15,
+    "rotationPolicy": "occasional"
   },
   {
     "id": "surya-gayatri",
     "title": "Gayatri Mantra",
     "deity": "surya",
-    "moments": ["dawn", "study"],
-    "intentions": ["clarity", "wisdom", "devotion"],
-    "timeContexts": ["dawn"],
+    "moments": [
+      "dawn",
+      "study"
+    ],
+    "intentions": [
+      "clarity",
+      "wisdom",
+      "devotion"
+    ],
+    "timeContexts": [
+      "dawn"
+    ],
     "durationSeconds": 30,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ भूर्भुवः स्वः।\nतत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि।\nधियो यो नः प्रचोदयात्॥" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ भूर्भुवः स्वः।\nतत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि।\nधियो यो नः प्रचोदयात्॥"
+    },
     "transliteration": "Oṃ bhūr bhuvaḥ svaḥ,\ntat savitur vareṇyaṃ bhargo devasya dhīmahi,\ndhiyo yo naḥ pracodayāt.",
     "meaning": "We meditate on the radiant glory of the divine Savitr (the sun); may it illumine our minds.",
     "sourceTitle": "Ṛgveda 3.62.10 (Gāyatrī mantra)",
@@ -301,18 +569,34 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": true,
-    "sortOrder": 16
+    "sortOrder": 16,
+    "rotationPolicy": "dailyAnchor"
   },
   {
     "id": "surya-namah",
     "title": "Om Suryaya Namah",
     "deity": "surya",
-    "moments": ["dawn", "leavingHome"],
-    "intentions": ["clarity", "courage"],
-    "timeContexts": ["dawn", "morning"],
+    "moments": [
+      "dawn",
+      "leavingHome"
+    ],
+    "intentions": [
+      "clarity",
+      "courage"
+    ],
+    "timeContexts": [
+      "dawn",
+      "morning"
+    ],
     "durationSeconds": 12,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ सूर्याय नमः" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ सूर्याय नमः"
+    },
     "transliteration": "Oṃ Sūryāya Namaḥ",
     "meaning": "Salutations to Surya, the sun. A bow to light at the start of the day.",
     "sourceTitle": "Traditional Sūrya namaḥ mantra",
@@ -320,18 +604,34 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 17
+    "sortOrder": 17,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "shanti-triple",
     "title": "Om Shanti Shanti Shanti",
     "deity": null,
-    "moments": ["sleep", "anxiety", "sunset"],
-    "intentions": ["peace"],
-    "timeContexts": ["sunset", "night"],
+    "moments": [
+      "sleep",
+      "anxiety",
+      "sunset"
+    ],
+    "intentions": [
+      "peace"
+    ],
+    "timeContexts": [
+      "sunset",
+      "night"
+    ],
     "durationSeconds": 20,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ शान्तिः शान्तिः शान्तिः" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ शान्तिः शान्तिः शान्तिः"
+    },
     "transliteration": "Oṃ Śāntiḥ Śāntiḥ Śāntiḥ",
     "meaning": "Peace, peace, peace — invoked threefold for body, mind, and spirit.",
     "sourceTitle": "Śānti mantra (Upaniṣadic peace invocation)",
@@ -339,18 +639,36 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 18
+    "sortOrder": 18,
+    "rotationPolicy": "dailyAnchor"
   },
   {
     "id": "shanti-asato-ma",
     "title": "Asato Ma Sad Gamaya",
     "deity": null,
-    "moments": ["dawn", "anxiety", "study"],
-    "intentions": ["clarity", "peace", "wisdom"],
-    "timeContexts": ["dawn", "night"],
+    "moments": [
+      "dawn",
+      "anxiety",
+      "study"
+    ],
+    "intentions": [
+      "clarity",
+      "peace",
+      "wisdom"
+    ],
+    "timeContexts": [
+      "dawn",
+      "night"
+    ],
     "durationSeconds": 25,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "असतो मा सद्गमय।\nतमसो मा ज्योतिर्गमय।\nमृत्योर्मा अमृतं गमय॥" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "असतो मा सद्गमय।\nतमसो मा ज्योतिर्गमय।\nमृत्योर्मा अमृतं गमय॥"
+    },
     "transliteration": "Asato mā sad gamaya,\ntamaso mā jyotir gamaya,\nmṛtyor mā amṛtaṃ gamaya.",
     "meaning": "Lead me from the unreal to the real, from darkness to light, from death to immortality.",
     "sourceTitle": "Bṛhadāraṇyaka Upaniṣad 1.3.28",
@@ -358,18 +676,34 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 19
+    "sortOrder": 19,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "shanti-sarve-bhavantu",
     "title": "Sarve Bhavantu Sukhinah",
     "deity": null,
-    "moments": ["gratitude", "sunset"],
-    "intentions": ["peace", "gratitude"],
-    "timeContexts": ["sunset", "morning"],
+    "moments": [
+      "gratitude",
+      "sunset"
+    ],
+    "intentions": [
+      "peace",
+      "gratitude"
+    ],
+    "timeContexts": [
+      "sunset",
+      "morning"
+    ],
     "durationSeconds": 25,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः।\nसर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत्॥" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः।\nसर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत्॥"
+    },
     "transliteration": "Sarve bhavantu sukhinaḥ sarve santu nirāmayāḥ,\nsarve bhadrāṇi paśyantu mā kaścid duḥkhabhāg bhavet.",
     "meaning": "May all be happy, may all be free from illness, may all see what is good, may none suffer.",
     "sourceTitle": "Śānti mantra (traditional Upaniṣadic invocation)",
@@ -377,18 +711,35 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 20
+    "sortOrder": 20,
+    "rotationPolicy": "rotateOften"
   },
   {
     "id": "shanti-lokah-samastah",
     "title": "Lokah Samastah Sukhino Bhavantu",
     "deity": null,
-    "moments": ["gratitude", "sunset", "sleep"],
-    "intentions": ["peace", "gratitude"],
-    "timeContexts": ["sunset", "night"],
+    "moments": [
+      "gratitude",
+      "sunset",
+      "sleep"
+    ],
+    "intentions": [
+      "peace",
+      "gratitude"
+    ],
+    "timeContexts": [
+      "sunset",
+      "night"
+    ],
     "durationSeconds": 15,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "लोकाः समस्ताः सुखिनो भवन्तु" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "लोकाः समस्ताः सुखिनो भवन्तु"
+    },
     "transliteration": "Lokāḥ samastāḥ sukhino bhavantu",
     "meaning": "May all beings everywhere be happy and free. A closing wish of goodwill.",
     "sourceTitle": "Traditional śānti / maṅgala invocation",
@@ -396,18 +747,36 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 21
+    "sortOrder": 21,
+    "rotationPolicy": "dailyAnchor"
   },
   {
     "id": "shanti-saha-navavatu",
     "title": "Om Saha Navavatu",
     "deity": null,
-    "moments": ["study", "meeting", "beforeWork"],
-    "intentions": ["clarity", "focus", "peace"],
-    "timeContexts": ["morning"],
+    "moments": [
+      "study",
+      "meeting",
+      "beforeWork"
+    ],
+    "intentions": [
+      "clarity",
+      "focus",
+      "peace"
+    ],
+    "timeContexts": [
+      "morning",
+      "midday"
+    ],
     "durationSeconds": 25,
-    "availableModes": ["listen", "chant", "silent"],
-    "primaryText": { "devanagari": "ॐ सह नाववतु। सह नौ भुनक्तु।\nसह वीर्यं करवावहै।\nतेजस्वि नावधीतमस्तु मा विद्विषावहै॥" },
+    "availableModes": [
+      "listen",
+      "chant",
+      "silent"
+    ],
+    "primaryText": {
+      "devanagari": "ॐ सह नाववतु। सह नौ भुनक्तु।\nसह वीर्यं करवावहै।\nतेजस्वि नावधीतमस्तु मा विद्विषावहै॥"
+    },
     "transliteration": "Oṃ saha nāv avatu, saha nau bhunaktu,\nsaha vīryaṃ karavāvahai,\ntejasvi nāv adhītam astu mā vidviṣāvahai.",
     "meaning": "May we be protected together, nourished together; may we work together with vigour; may our study be radiant; may we not quarrel.",
     "sourceTitle": "Taittirīya & Kaṭha Upaniṣad śānti mantra",
@@ -415,6 +784,7 @@
     "isReviewed": true,
     "needsReview": false,
     "isFeatured": false,
-    "sortOrder": 22
+    "sortOrder": 22,
+    "rotationPolicy": "rotateOften"
   }
 ]

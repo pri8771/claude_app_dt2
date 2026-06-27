@@ -41,9 +41,11 @@
 ## Key components
 
 ### TimeBandResolver
-Pure mapping from a wall-clock time to a `TimeContext`:
-- Dawn 04:30–08:00, Morning 08:00–16:30, Sunset 16:30–20:00, Night 20:00–04:30.
-- Midday (12:00–16:30) folds into Morning so the day is fully covered with no gap.
+Pure mapping from a wall-clock time to a `TimeContext` (five bands):
+- Dawn 04:30–07:59, Morning 08:00–11:59, Midday 12:00–15:59, Sunset 16:00–19:59,
+  Night 20:00–04:29 (wraps past midnight).
+- Every minute maps to exactly one band — no gap. Midday is its own band with a
+  distinct ivory/saffron theme ("A pause at midday").
 - Exposes a `minutesSinceMidnight` entry point for trivial, clock-free testing.
 
 ### PrayerDataLoader
@@ -54,10 +56,18 @@ how acceptance criterion *"invalid content does not crash"* is met.
 
 ### TodayContextEngine
 The heart of Today. Given a `TodayEngineInput` (prayers, time band, explicit
-moment, preferred deity, favourite moments, prayers completed today) it returns
-a `TodayContext` (theme, copy, selected prayer, alternates). Pure function — no
-clocks, no globals — so every rule is deterministically unit-tested. Scoring and
-exclusions are documented in `PRD.md`.
+moment, preferred deity, favourite moments, and a per-prayer
+`CompletionRecency` map) it returns a `TodayContext` (theme, copy, selected
+prayer, alternates). Pure function — no clocks, no globals — so every rule is
+deterministically unit-tested.
+
+Completion **never excludes** a prayer; it applies a graded recency penalty
+(this session −90, earlier today −60, yesterday −20, within 3 days −10, then 0)
+so the day feels fresh while tomorrow's repetition is allowed. A prayer's
+`RotationPolicy` tunes this: `.dailyAnchor` prayers (Gayatri, Om Shanti, a
+simple Ganesha invocation, the evening close) are exempt from the "yesterday"
+nudge so they return each day. Only `needsReview`/unreviewed prayers are
+hard-excluded. Scoring is documented in `PRD.md`.
 
 ### PrayerLibrary
 `@MainActor ObservableObject` holding all loaded prayers, with lookups by id,
@@ -103,8 +113,13 @@ import Anjali`).
 ## Testing strategy
 
 Unit tests target the deterministic core:
-- `TimeBandResolverTests` — boundary mapping for all four bands and the midnight wrap.
+- `TimeBandResolverTests` — boundary mapping for all five bands (dawn/morning/
+  midday/sunset/night), the midnight wrap, and full-day coverage.
 - `PrayerDataLoaderTests` — loads seed data, validates fields, skips malformed records.
-- `TodayContextEngineTests` — dawn/sunset/night selection, preferred-deity ranking,
-  recently-completed deprioritisation, needsReview/unreviewed/mode-less exclusion,
-  explicit-moment override, scoring order, and alternates.
+- `TodayContextEngineTests` — dawn/midday/sunset/night selection, preferred-deity
+  ranking, graded recency penalties, daily-anchor "yesterday" waiver, completion
+  never excluding, needsReview/unreviewed exclusion, text-only prayers still
+  selectable (Silent fallback), explicit-moment override, scoring order, alternates.
+
+`Scripts/validate_prayers.py` validates `prayers.json` against the Swift enums
+(including `rotationPolicy`) and can gate CI.

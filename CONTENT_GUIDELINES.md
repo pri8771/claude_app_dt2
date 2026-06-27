@@ -63,7 +63,11 @@ Each `Prayer` carries two booleans:
 - [ ] `deity`, `moments`, `intentions`, `timeContexts` are accurate.
 - [ ] `availableModes` reflects what truly works (omit `listen` only if you also
       want to forbid the graceful audio fallback — usually leave it in).
+- [ ] `rotationPolicy` is set: `dailyAnchor` only for true daily staples
+      (Gayatri, Om Shanti, a simple Ganesha invocation, the evening close);
+      `occasional` for special-intention prayers; otherwise `rotateOften`.
 - [ ] If anything is uncertain: `isReviewed: false`, `needsReview: true`.
+- [ ] `python3 Scripts/validate_prayers.py` passes.
 
 ## Audio
 

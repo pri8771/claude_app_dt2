@@ -17,7 +17,9 @@ for attention.
 ## What it does
 
 - **Today** — one contextual prayer card that changes with the time of day
-  (Dawn / Morning / Sunset / Night), each with its own colour theme and copy.
+  (Dawn / Morning / Midday / Sunset / Night), each with its own colour theme and
+  copy. Selection uses a graded recency model so the card stays fresh while
+  daily anchors (Gayatri, Om Shanti, …) can return each day.
 - **Prayer Player** — a full-screen, calm experience with three modes:
   - **Listen** (audio, when available — falls back gracefully when not)
   - **Chant** (text with a gentle progress flame)
