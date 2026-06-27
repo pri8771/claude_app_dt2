@@ -21,7 +21,26 @@ final class PrayerDataLoaderTests: XCTestCase {
         XCTAssertFalse(PrayerDataLoader.isValid(makePrayer(id: " ")))
         XCTAssertFalse(PrayerDataLoader.isValid(makePrayer(id: "x", title: "")))
         XCTAssertFalse(PrayerDataLoader.isValid(makePrayer(id: "x", duration: 0)))
-        XCTAssertFalse(PrayerDataLoader.isValid(makePrayer(id: "x", modes: [])))
+
+        // Empty availableModes is VALID — the prayer is still playable in
+        // Silent via Prayer.playableModes.
+        XCTAssertTrue(PrayerDataLoader.isValid(makePrayer(id: "x", modes: [])))
+    }
+
+    func testEmptyModesPrayerLoadsAndFallsBackToSilent() {
+        let json = """
+        [
+          { "id": "noModes", "title": "No Modes", "deity": "shiva", "moments": ["sleep"],
+            "intentions": ["peace"], "timeContexts": ["night"], "durationSeconds": 15,
+            "availableModes": [], "primaryText": { "devanagari": "ॐ" },
+            "transliteration": "Oṃ", "meaning": "Test", "sourceTitle": "Test",
+            "audioAssetName": null, "isReviewed": true, "needsReview": false,
+            "isFeatured": false, "sortOrder": 1, "rotationPolicy": "rotateOften" }
+        ]
+        """
+        let prayers = PrayerDataLoader.loadPrayers(from: Data(json.utf8))
+        XCTAssertEqual(prayers.count, 1)
+        XCTAssertEqual(prayers.first?.playableModes, [.silent])
     }
 
     func testSkipsMalformedEntriesWithoutCrashing() {

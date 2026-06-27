@@ -1,7 +1,8 @@
 import Foundation
 
-/// The four contextual time bands the app moves through across a day.
-/// Each band drives the visual theme and copy on the Today screen.
+/// The five contextual time bands the app moves through across a day
+/// (dawn, morning, midday, sunset, night). Each band drives the visual theme
+/// and copy on the Today screen.
 enum TimeContext: String, Codable, CaseIterable, Identifiable, Hashable {
     case dawn       // 04:30–07:59
     case morning    // 08:00–11:59

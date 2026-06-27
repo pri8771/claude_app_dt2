@@ -5,7 +5,8 @@ Checks that every prayer:
   * has all required fields,
   * uses only known enum raw values (moments, intentions, timeContexts,
     deity, availableModes, rotationPolicy), matching the Swift enums,
-  * has a positive duration and at least one available mode,
+  * has a positive duration (availableModes may be empty — Silent is always
+    available via Prayer.playableModes),
   * has a unique id,
   * is honestly sourced (non-empty sourceTitle).
 
@@ -83,8 +84,8 @@ def validate(path: Path) -> list[str]:
 
         if prayer.get("durationSeconds", 0) <= 0:
             errors.append(f"{pid}: durationSeconds must be > 0")
-        if not prayer.get("availableModes"):
-            errors.append(f"{pid}: availableModes must not be empty")
+        # availableModes may be empty (Silent is always available via
+        # Prayer.playableModes) — only the listed values are validated, above.
         if not (prayer.get("sourceTitle") or "").strip():
             errors.append(f"{pid}: sourceTitle must not be empty")
         if not (prayer.get("primaryText", {}).get("devanagari") or "").strip():
@@ -107,8 +108,13 @@ def main() -> int:
             print(f"  - {err}")
         return 1
 
-    count = len(json.loads(path.read_text()))
+    data = json.loads(path.read_text())
+    count = len(data)
+    no_modes = [p.get("id", "?") for p in data if not p.get("availableModes")]
     print(f"OK: {count} prayers valid in {path.name}")
+    if no_modes:
+        print(f"  note: {len(no_modes)} with no explicit modes "
+              f"(Silent fallback): {', '.join(no_modes)}")
     return 0
 
 

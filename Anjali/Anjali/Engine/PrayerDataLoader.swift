@@ -53,14 +53,18 @@ struct PrayerDataLoader {
     }
 
     /// Field-level validation beyond what `Codable` enforces.
+    ///
+    /// `availableModes` may be empty: every prayer is always playable in Silent
+    /// via `Prayer.playableModes`, so a missing mode list does not make a record
+    /// invalid. The only Today-selection hard exclusions are needsReview /
+    /// unreviewed (handled by the engine), not content validity.
     static func isValid(_ prayer: Prayer) -> Bool {
         guard !prayer.id.trimmingCharacters(in: .whitespaces).isEmpty,
               !prayer.title.trimmingCharacters(in: .whitespaces).isEmpty,
               !prayer.primaryText.devanagari.trimmingCharacters(in: .whitespaces).isEmpty,
               !prayer.meaning.trimmingCharacters(in: .whitespaces).isEmpty,
               !prayer.sourceTitle.trimmingCharacters(in: .whitespaces).isEmpty,
-              prayer.durationSeconds > 0,
-              !prayer.availableModes.isEmpty
+              prayer.durationSeconds > 0
         else {
             return false
         }
