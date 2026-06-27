@@ -57,6 +57,8 @@ Anjali/
     Assets.xcassets            # App icon + accent colour
     Info.plist                 # Bundle config + anjali:// URL scheme
   AnjaliTests/                 # Engine, loader, and time-band unit tests
+Content/                       # Content pipeline (CSV catalog, review checklist)
+Scripts/                       # validate_prayers.py, export_catalog.py
 README.md  PRD.md  ARCHITECTURE.md  CONTENT_GUIDELINES.md
 ```
 

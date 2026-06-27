@@ -77,6 +77,20 @@ final class TodayContextEngineTests: XCTestCase {
         XCTAssertEqual(context.selectedPrayer?.id, "ganesha")
     }
 
+    // MARK: Preferred mode
+
+    func testPreferredModeIsRankedHigher() {
+        let listenable = prayer("listen", timeContexts: [.morning], modes: [.listen, .chant, .silent])
+        let silentOnly = prayer("silent", timeContexts: [.morning], modes: [.silent])
+        let input = TodayEngineInput(
+            prayers: [silentOnly, listenable],
+            timeContext: .morning,
+            preferredMode: .listen
+        )
+        let context = TodayContextEngine.makeContext(input: input)
+        XCTAssertEqual(context.selectedPrayer?.id, "listen")
+    }
+
     // MARK: Recency penalties
 
     func testRecencyPenaltyValuesForNormalRotation() {

@@ -8,6 +8,7 @@ import Foundation
 ///          favourited moment)
 /// - `+35`  the prayer's time contexts include the current band
 /// - `+40`  the prayer's deity matches the user's preferred (ishta) deity
+/// - `+15`  the prayer supports the user's preferred mode (Listen/Chant/Silent)
 ///
 /// Recency penalties (a completion never *excludes* a prayer — it only nudges
 /// it down so the day feels fresh, while tomorrow's repetition is allowed):
@@ -27,6 +28,7 @@ enum TodayContextEngine {
     static let inferredMomentBonus = 60
     static let timeContextBonus = 35
     static let preferredDeityBonus = 40
+    static let preferredModeBonus = 15
     static let needsReviewPenalty = -100
 
     // Recency penalties.
@@ -99,6 +101,10 @@ enum TodayContextEngine {
 
         if let deity = input.preferredDeity, prayer.deity == deity {
             score += preferredDeityBonus
+        }
+
+        if let mode = input.preferredMode, prayer.playableModes.contains(mode) {
+            score += preferredModeBonus
         }
 
         if prayer.needsReview {

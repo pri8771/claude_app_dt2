@@ -21,6 +21,7 @@ struct TodayView: View {
             explicitMoment: nil,
             preferredDeity: settings.ishtaDevata,
             preferredMoments: settings.favoriteMoments,
+            preferredMode: settings.preferredPrayerMode,
             completionRecency: buildRecency(now: now, calendar: calendar)
         )
         return TodayContextEngine.makeContext(input: input)

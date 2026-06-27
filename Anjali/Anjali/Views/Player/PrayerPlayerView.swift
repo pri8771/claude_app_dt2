@@ -77,6 +77,7 @@ struct PrayerPlayerView: View {
             .padding(.horizontal, 24)
         }
         .preferredColorScheme(theme.prefersDarkForeground ? .light : .dark)
+        .onAppear { applyPreferredMode() }
         .onChange(of: controller.isFinished) { _, finished in
             if finished {
                 recordCompletion()
@@ -146,6 +147,14 @@ struct PrayerPlayerView: View {
     }
 
     // MARK: Actions
+
+    /// Open in the user's preferred mode when this prayer supports it.
+    private func applyPreferredMode() {
+        let preferred = settings.preferredPrayerMode
+        guard prayer.playableModes.contains(preferred), preferred != mode else { return }
+        mode = preferred
+        controller.setMode(preferred)
+    }
 
     private func recordCompletion() {
         let completion = PrayerCompletion(prayerID: prayer.id, mode: mode, completedAt: Date())

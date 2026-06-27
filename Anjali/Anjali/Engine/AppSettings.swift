@@ -11,6 +11,7 @@ final class AppSettings: ObservableObject {
     enum Key {
         static let hasCompletedOnboarding = "hasCompletedOnboarding"
         static let scriptPreference = "scriptPreference"
+        static let preferredPrayerMode = "preferredPrayerMode"
         static let ishtaDevata = "ishtaDevata"
         static let favoriteMoments = "favoriteMoments"
         static let enabledReminders = "enabledReminders"
@@ -37,6 +38,16 @@ final class AppSettings: ObservableObject {
             return value
         }
         set { defaults.set(newValue.rawValue, forKey: Key.scriptPreference); bump() }
+    }
+
+    /// The mode the user prefers to experience prayers in. Defaults to Listen.
+    var preferredPrayerMode: PlayMode {
+        get {
+            guard let raw = defaults.string(forKey: Key.preferredPrayerMode),
+                  let value = PlayMode(rawValue: raw) else { return .listen }
+            return value
+        }
+        set { defaults.set(newValue.rawValue, forKey: Key.preferredPrayerMode); bump() }
     }
 
     var ishtaDevata: Deity? {

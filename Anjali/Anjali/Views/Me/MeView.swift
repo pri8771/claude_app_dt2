@@ -14,6 +14,7 @@ struct MeView: View {
 
     // Local mirrors so SwiftUI re-renders on change.
     @State private var script: ScriptPreference = .both
+    @State private var mode: PlayMode = .listen
     @State private var ishta: Deity?
     @State private var favoriteMoments: Set<Moment> = []
     @State private var enabledReminders: Set<ReminderSlot> = []
@@ -22,6 +23,7 @@ struct MeView: View {
         NavigationStack {
             Form {
                 scriptSection
+                modeSection
                 ishtaSection
                 momentsSection
                 remindersSection
@@ -41,6 +43,15 @@ struct MeView: View {
                 ForEach(ScriptPreference.allCases) { Text($0.displayName).tag($0) }
             }
             .onChange(of: script) { _, value in settings.scriptPreference = value }
+        }
+    }
+
+    private var modeSection: some View {
+        Section("Preferred mode") {
+            Picker("Pray with", selection: $mode) {
+                ForEach(PlayMode.allCases) { Text($0.displayName).tag($0) }
+            }
+            .onChange(of: mode) { _, value in settings.preferredPrayerMode = value }
         }
     }
 
@@ -147,6 +158,7 @@ struct MeView: View {
 
     private func loadState() {
         script = settings.scriptPreference
+        mode = settings.preferredPrayerMode
         ishta = settings.ishtaDevata
         favoriteMoments = Set(settings.favoriteMoments)
         enabledReminders = settings.enabledReminders

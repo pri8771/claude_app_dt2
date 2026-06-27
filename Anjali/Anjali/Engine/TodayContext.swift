@@ -42,6 +42,9 @@ struct TodayEngineInput {
     var preferredDeity: Deity?
     /// Moments the user has favourited.
     var preferredMoments: [Moment]
+    /// The mode the user prefers (Listen/Chant/Silent), if set. Prayers that
+    /// support it are nudged up slightly.
+    var preferredMode: PlayMode?
     /// Most recent completion recency per prayer id. Absent ids are treated as
     /// `.longAgoOrNever`.
     var completionRecency: [String: CompletionRecency]
@@ -52,6 +55,7 @@ struct TodayEngineInput {
         explicitMoment: Moment? = nil,
         preferredDeity: Deity? = nil,
         preferredMoments: [Moment] = [],
+        preferredMode: PlayMode? = nil,
         completionRecency: [String: CompletionRecency] = [:]
     ) {
         self.prayers = prayers
@@ -59,6 +63,7 @@ struct TodayEngineInput {
         self.explicitMoment = explicitMoment
         self.preferredDeity = preferredDeity
         self.preferredMoments = preferredMoments
+        self.preferredMode = preferredMode
         self.completionRecency = completionRecency
     }
 }
