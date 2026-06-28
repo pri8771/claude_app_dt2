@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Content validation only for now. The Xcode build/tests run on macOS locally
+# (./Scripts/build.sh); no macOS runner is used here yet.
+jobs:
+  validate-content:
+    name: Validate prayer content
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate prayers.json
+        run: python3 Scripts/validate_prayers.py
+
+      - name: Check catalog export is in sync
+        run: |
+          python3 Scripts/export_catalog.py
+          if ! git diff --quiet -- Content/; then
+            echo "::error::Content/ CSVs are out of sync with prayers.json. Run 'python3 Scripts/export_catalog.py' and commit the result."
+            git --no-pager diff --stat -- Content/
+            exit 1
+          fi
+          echo "Catalog export is in sync."
