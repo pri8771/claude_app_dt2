@@ -58,10 +58,10 @@ Anjali/
     Info.plist                 # Bundle config + anjali:// URL scheme
   AnjaliTests/                 # Engine, loader, and time-band unit tests
 Content/                       # Content pipeline (CSV catalog, review checklist)
-AppStore/                      # Listing, privacy policy, app-icon spec
+AppStore/                      # Listing, privacy policy, app-icon spec, release checklist
 Scripts/                       # validate_prayers.py, export_catalog.py, build.sh
 README.md  PRD.md  ARCHITECTURE.md  CONTENT_GUIDELINES.md
-SETUP.md  RELEASE_CHECKLIST.md  STATIC_AUDIT.md
+SETUP.md  STATIC_AUDIT.md  AppStore/RELEASE_CHECKLIST.md
 ```
 
 ## Build & run
