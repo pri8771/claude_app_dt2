@@ -56,11 +56,27 @@ Select the **Anjali** scheme and an **iOS 17** simulator, then **⌘R** to run o
 
 ## Building from the command line
 
-A convenience script runs a clean build followed by the tests:
+A convenience script prints the environment, validates content, lists the
+project, then runs a clean build followed by the tests:
 
 ```bash
 ./Scripts/build.sh
 ```
+
+**Override the simulator** with the `DESTINATION` env var (default is
+`platform=iOS Simulator,name=iPhone 15`):
+
+```bash
+DESTINATION="platform=iOS Simulator,name=iPhone 16" ./Scripts/build.sh
+```
+
+**Logs.** The script writes the *full* (untruncated) logs to:
+- `BuildReports/build.log` — the clean build
+- `BuildReports/test.log` — the test run
+
+`BuildReports/` is git-ignored. The script uses `set -euo pipefail` (with
+`pipefail` before each `xcodebuild | tee`), so it **exits non-zero** if the
+build or tests fail, and prints `=== Success ===` only when both complete.
 
 Or run the commands directly:
 
@@ -140,6 +156,36 @@ Settings*, or `xcrun simctl erase all`).
 ### Resilience
 - [ ] App works after **force-quit / relaunch** (state preserved).
 - [ ] App works fully in **airplane mode** (offline-first; no network calls).
+
+### Deep links
+With the app installed and the simulator **booted**, trigger the `anjali://`
+URL scheme from the terminal:
+
+```bash
+xcrun simctl openurl booted anjali://moment/dawn
+xcrun simctl openurl booted anjali://prayer/ganesha-gam
+```
+
+- [ ] `anjali://moment/dawn` opens the **Moments** tab on the Dawn moment.
+- [ ] `anjali://prayer/ganesha-gam` opens the **player** for that prayer.
+- [ ] An unknown id (e.g. `anjali://prayer/does-not-exist`) is ignored
+      gracefully (no crash).
+
+### Accessibility
+- [ ] **Large Dynamic Type:** in *Settings → Accessibility → Display & Text
+      Size → Larger Text* (or the simulator's Environment Overrides), raise the
+      text size to the largest setting — the Today card, player text, and
+      onboarding remain readable and don't clip badly.
+- [ ] **VoiceOver labels:** with VoiceOver on, the **Begin** button, the
+      **Listen / Chant / Silent** mode picker, and the **Done / Repeat / Save
+      this prayer** completion buttons are announced with clear, correct labels.
+- [ ] **Reduce Motion:** in *Settings → Accessibility → Motion → Reduce Motion*,
+      the flame/progress and transitions degrade gracefully (no jarring or
+      excessive animation).
+- [ ] **Contrast across all five time bands:** check Dawn, Morning, Midday,
+      Sunset, and Night — foreground text and the accent meet a comfortable
+      contrast on each background (Midday/Morning are light; Dawn/Sunset/Night
+      are dark).
 
 ## Known follow-ups before TestFlight
 
