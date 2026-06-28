@@ -162,7 +162,8 @@ struct MeView: View {
         ishta = settings.ishtaDevata
         favoriteMoments = Set(settings.favoriteMoments)
         enabledReminders = settings.enabledReminders
-        Task {
+        // @MainActor so the @State mutation after the await stays on the main thread.
+        Task { @MainActor in
             let status = await notifications.authorizationStatus()
             notificationsDenied = (status == .denied)
         }
