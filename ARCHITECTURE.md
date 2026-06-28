@@ -69,6 +69,19 @@ simple Ganesha invocation, the evening close) are exempt from the "yesterday"
 nudge so they return each day. Only `needsReview`/unreviewed prayers are
 hard-excluded. Scoring is documented in `PRD.md`.
 
+> **Tuning TODO before TestFlight — favourite-moment weighting.**
+> Today, both a time-band inferred moment *and* a user-favourited moment feed
+> the same `+60` inferred-moment bonus, so a favourite counts exactly as much as
+> the current time of day. That's likely too strong — favourites can dominate
+> the band. Proposed retune (post-build, with a few test updates):
+> - time-band inferred moment match: **+60** (unchanged)
+> - favourite-moment match: **+15 to +20** (its own, lighter signal)
+> - favourite-moment that is *also* time-compatible: optional **+10** bonus
+>
+> Implementation note: separate the favourite-moment contribution from
+> `timeContext.inferredMoments` in `TodayContextEngine.score(_:input:)` rather
+> than unioning them into one set as it does now.
+
 ### PrayerLibrary
 `@MainActor ObservableObject` holding all loaded prayers, with lookups by id,
 moment, and deity, and the set of moments/deities that actually have content.
