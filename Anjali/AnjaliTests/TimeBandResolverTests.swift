@@ -43,6 +43,23 @@ final class TimeBandResolverTests: XCTestCase {
         }
     }
 
+    func testAllFiveBandsAreReachableOverADay() {
+        var seen = Set<TimeContext>()
+        for m in 0..<(24 * 60) {
+            seen.insert(TimeBandResolver.timeContext(forMinutesSinceMidnight: m))
+        }
+        XCTAssertEqual(seen, Set(TimeContext.allCases))
+        XCTAssertEqual(seen.count, 5)
+    }
+
+    func testRepresentativeMinutePerBand() {
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(5, 0)), .dawn)
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(9, 0)), .morning)
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(13, 0)), .midday)
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(18, 0)), .sunset)
+        XCTAssertEqual(TimeBandResolver.timeContext(forMinutesSinceMidnight: minutes(22, 0)), .night)
+    }
+
     func testResolvesFromDate() {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: "UTC")!

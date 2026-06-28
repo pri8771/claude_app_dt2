@@ -66,19 +66,62 @@ final class PrayerDataLoaderTests: XCTestCase {
         XCTAssertEqual(PrayerDataLoader.loadPrayers(from: Data("garbage".utf8)).count, 0)
     }
 
+    func testNilTitleAndNilMeaningRecordsAreSkipped() {
+        // `null` for a non-optional field fails decoding; an empty string fails
+        // field validation. Either way the bad record is dropped, the good one
+        // survives, and nothing crashes.
+        let json = """
+        [
+          { "id": "nilTitle", "title": null, "deity": "shiva", "moments": ["sleep"],
+            "intentions": ["peace"], "timeContexts": ["night"], "durationSeconds": 15,
+            "availableModes": ["silent"], "primaryText": { "devanagari": "ॐ" },
+            "transliteration": "Oṃ", "meaning": "Test", "sourceTitle": "Test",
+            "audioAssetName": null, "isReviewed": true, "needsReview": false,
+            "isFeatured": false, "sortOrder": 1, "rotationPolicy": "rotateOften" },
+          { "id": "nilMeaning", "title": "Has Title", "deity": "shiva", "moments": ["sleep"],
+            "intentions": ["peace"], "timeContexts": ["night"], "durationSeconds": 15,
+            "availableModes": ["silent"], "primaryText": { "devanagari": "ॐ" },
+            "transliteration": "Oṃ", "meaning": null, "sourceTitle": "Test",
+            "audioAssetName": null, "isReviewed": true, "needsReview": false,
+            "isFeatured": false, "sortOrder": 2, "rotationPolicy": "rotateOften" },
+          { "id": "emptyMeaning", "title": "Has Title", "deity": "shiva", "moments": ["sleep"],
+            "intentions": ["peace"], "timeContexts": ["night"], "durationSeconds": 15,
+            "availableModes": ["silent"], "primaryText": { "devanagari": "ॐ" },
+            "transliteration": "Oṃ", "meaning": "   ", "sourceTitle": "Test",
+            "audioAssetName": null, "isReviewed": true, "needsReview": false,
+            "isFeatured": false, "sortOrder": 3, "rotationPolicy": "rotateOften" },
+          { "id": "good", "title": "Good", "deity": "shiva", "moments": ["sleep"],
+            "intentions": ["peace"], "timeContexts": ["night"], "durationSeconds": 15,
+            "availableModes": ["silent"], "primaryText": { "devanagari": "ॐ" },
+            "transliteration": "Oṃ", "meaning": "A real meaning", "sourceTitle": "Test",
+            "audioAssetName": null, "isReviewed": true, "needsReview": false,
+            "isFeatured": false, "sortOrder": 4, "rotationPolicy": "rotateOften" }
+        ]
+        """
+        let prayers = PrayerDataLoader.loadPrayers(from: Data(json.utf8))
+        XCTAssertEqual(prayers.map(\.id), ["good"])
+    }
+
+    func testEmptyTitleAndMeaningFailValidation() {
+        XCTAssertFalse(PrayerDataLoader.isValid(makePrayer(id: "x", title: "")))
+        XCTAssertFalse(PrayerDataLoader.isValid(makePrayer(id: "x", meaning: "")))
+        XCTAssertTrue(PrayerDataLoader.isValid(makePrayer(id: "x")))
+    }
+
     // MARK: Helpers
 
     private func makePrayer(
         id: String,
         title: String = "Title",
         duration: Int = 15,
-        modes: [PlayMode] = [.silent]
+        modes: [PlayMode] = [.silent],
+        meaning: String = "meaning"
     ) -> Prayer {
         Prayer(
             id: id, title: title, deity: .shiva, moments: [.sleep],
             intentions: [.peace], timeContexts: [.night], durationSeconds: duration,
             availableModes: modes, primaryText: PrayerText(devanagari: "ॐ"),
-            transliteration: "Oṃ", meaning: "meaning", sourceTitle: "source",
+            transliteration: "Oṃ", meaning: meaning, sourceTitle: "source",
             audioAssetName: nil, isReviewed: true, needsReview: false,
             isFeatured: false, sortOrder: 0, rotationPolicy: .rotateOften
         )
