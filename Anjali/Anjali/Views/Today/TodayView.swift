@@ -16,6 +16,8 @@ struct TodayView: View {
     /// Which of today's contextual prayers the card is showing (0 = the
     /// top-ranked selection; "Change" steps through the rest).
     @State private var cardIndex = 0
+    /// Dynamic Type multiplier for the display headline.
+    @ScaledMetric(relativeTo: .largeTitle) private var typeScale: CGFloat = 1
 
     private var context: TodayContext {
         let calendar = Calendar.current
@@ -122,13 +124,16 @@ struct TodayView: View {
                 .tracking(2)
                 .foregroundStyle(theme.accent)
             Text(context.headline)
-                .font(.system(size: 30, weight: .semibold, design: .serif))
+                .font(.system(size: 30 * typeScale, weight: .semibold, design: .serif))
                 .foregroundStyle(theme.foreground)
+                .minimumScaleFactor(0.7)
             Text(context.subheadline)
                 .font(.body)
                 .foregroundStyle(theme.secondaryForeground)
         }
         .padding(.top, 24)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(theme.eyebrow). \(context.headline). \(context.subheadline)")
     }
 
     private func emptyState(theme: ThemePalette) -> some View {

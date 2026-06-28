@@ -13,6 +13,8 @@ struct PrayerCardView: View {
     let onSilent: () -> Void
     let onChange: () -> Void
 
+    @ScaledMetric(relativeTo: .title) private var typeScale: CGFloat = 1
+
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack {
@@ -21,11 +23,12 @@ struct PrayerCardView: View {
                 }
                 Spacer()
                 InfoChip(text: prayer.durationLabel, systemImage: "clock", tint: theme.accent)
+                    .accessibilityLabel("Duration: \(prayer.accessibleDuration)")
             }
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(prayer.title)
-                    .font(.system(size: 26, weight: .semibold, design: .serif))
+                    .font(.system(size: 26 * typeScale, weight: .semibold, design: .serif))
                     .foregroundStyle(theme.foreground)
                 Text(prayer.transliteration)
                     .font(.callout)

@@ -9,6 +9,8 @@ struct CompletionView: View {
     let onSave: () -> Void
 
     @State private var appeared = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @ScaledMetric(relativeTo: .title) private var typeScale: CGFloat = 1
 
     var body: some View {
         ZStack {
@@ -18,14 +20,15 @@ struct CompletionView: View {
                 Spacer()
 
                 Image(systemName: "flame.fill")
-                    .font(.system(size: 64))
+                    .font(.system(size: 64 * typeScale))
                     .foregroundStyle(theme.accent)
                     .shadow(color: theme.accent.opacity(0.6), radius: 20)
                     .scaleEffect(appeared ? 1 : 0.6)
                     .opacity(appeared ? 1 : 0)
+                    .accessibilityHidden(true)
 
                 Text("May this action be steady.")
-                    .font(.system(size: 24, weight: .regular, design: .serif))
+                    .font(.system(size: 24 * typeScale, weight: .regular, design: .serif))
                     .foregroundStyle(theme.foreground)
                     .multilineTextAlignment(.center)
 
@@ -59,8 +62,12 @@ struct CompletionView: View {
             .padding(28)
         }
         .onAppear {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) {
+            if reduceMotion {
                 appeared = true
+            } else {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) {
+                    appeared = true
+                }
             }
         }
     }

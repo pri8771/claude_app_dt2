@@ -6,6 +6,7 @@ import Foundation
 /// and animating opacity — reliable regardless of gradient interpolation.
 struct TimeBandBackground: View {
     let timeContext: TimeContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
@@ -15,7 +16,7 @@ struct TimeBandBackground: View {
             }
         }
         .ignoresSafeArea()
-        .animation(.easeInOut(duration: 0.8), value: timeContext)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.8), value: timeContext)
     }
 }
 
@@ -94,6 +95,7 @@ struct FlameProgressView: View {
     /// 0...1
     let progress: Double
     let theme: ThemePalette
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
@@ -106,12 +108,14 @@ struct FlameProgressView: View {
                     style: StrokeStyle(lineWidth: 6, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
-                .animation(.linear(duration: 0.2), value: progress)
+                .animation(reduceMotion ? nil : .linear(duration: 0.2), value: progress)
             Image(systemName: "flame.fill")
                 .font(.system(size: 34))
                 .foregroundStyle(theme.accent)
                 .shadow(color: theme.accent.opacity(0.6), radius: 12)
-                .scaleEffect(1 + 0.05 * sin(progress * .pi * 8))
+                // Gentle pulse — held steady when Reduce Motion is on.
+                .scaleEffect(reduceMotion ? 1 : 1 + 0.05 * sin(progress * .pi * 8))
         }
+        .accessibilityHidden(true)
     }
 }

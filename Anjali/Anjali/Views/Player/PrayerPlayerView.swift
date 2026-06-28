@@ -16,6 +16,7 @@ struct PrayerPlayerView: View {
     @StateObject private var controller: PlayerController
     @State private var mode: PlayMode
     @State private var showCompletion = false
+    @ScaledMetric(relativeTo: .title) private var typeScale: CGFloat = 1
 
     // Today's theme drives the player background too.
     private let theme = ThemePalette.palette(for: TimeBandResolver.timeContext(for: Date()))
@@ -75,7 +76,7 @@ struct PrayerPlayerView: View {
             ScrollView {
                 VStack(spacing: 22) {
                     Text(prayer.title)
-                        .font(.system(size: 22, weight: .semibold, design: .serif))
+                        .font(.system(size: 22 * typeScale, weight: .semibold, design: .serif))
                         .foregroundStyle(theme.foreground)
 
                     PrayerTextView(
@@ -131,7 +132,7 @@ struct PrayerPlayerView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     Text(prayer.title)
-                        .font(.system(size: 22, weight: .semibold, design: .serif))
+                        .font(.system(size: 22 * typeScale, weight: .semibold, design: .serif))
                         .foregroundStyle(theme.foreground)
 
                     PrayerTextView(
@@ -200,6 +201,7 @@ struct PrayerPlayerView: View {
             .accessibilityLabel("Close")
             Spacer()
             InfoChip(text: prayer.durationLabel, systemImage: "clock", tint: theme.accent)
+                .accessibilityLabel("Duration: \(prayer.accessibleDuration)")
         }
         .padding(.top, 12)
     }

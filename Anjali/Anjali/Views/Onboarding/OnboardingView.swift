@@ -15,6 +15,7 @@ struct OnboardingView: View {
     @State private var favoriteMoments: Set<Moment> = []
     @State private var remindersOn = false
     @State private var showReminderDeniedNote = false
+    @ScaledMetric(relativeTo: .largeTitle) private var typeScale: CGFloat = 1
 
     private let theme = ThemePalette.palette(for: .dawn)
 
@@ -57,8 +58,10 @@ struct OnboardingView: View {
         VStack(spacing: 16) {
             Spacer()
             Text("Anjali")
-                .font(.system(size: 64, weight: .light, design: .serif))
+                .font(.system(size: 64 * typeScale, weight: .light, design: .serif))
                 .foregroundStyle(theme.accent)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
             Text("A sacred pause for everyday life")
                 .font(.title3)
                 .foregroundStyle(theme.foreground.opacity(0.85))

@@ -48,6 +48,17 @@ struct Prayer: Identifiable, Codable, Hashable {
         return seconds == 0 ? "\(minutes)m" : "\(minutes)m \(seconds)s"
     }
 
+    /// A spelled-out duration for VoiceOver (e.g. "12 seconds", "1 minute 30
+    /// seconds") so it isn't read as "twelve s".
+    var accessibleDuration: String {
+        let minutes = durationSeconds / 60
+        let seconds = durationSeconds % 60
+        func plural(_ n: Int, _ unit: String) -> String { "\(n) \(unit)\(n == 1 ? "" : "s")" }
+        if minutes == 0 { return plural(seconds, "second") }
+        if seconds == 0 { return plural(minutes, "minute") }
+        return "\(plural(minutes, "minute")) \(plural(seconds, "second"))"
+    }
+
     /// The modes a user can actually start. Every prayer is always completable
     /// in Silent (read-only), so Silent is guaranteed to be present even if it
     /// wasn't listed — and a prayer with no listed modes still degrades to
