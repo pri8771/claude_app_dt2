@@ -36,6 +36,8 @@ struct CompletionView: View {
                         Text("Done").frame(maxWidth: .infinity)
                     }
                     .buttonStyle(AnjaliPrimaryButtonStyle(theme: theme))
+                    .accessibilityLabel("Done")
+                    .accessibilityHint("Return to Today")
 
                     HStack(spacing: 12) {
                         Button(action: onRepeat) {
@@ -43,12 +45,14 @@ struct CompletionView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .secondaryAction(theme: theme)
+                        .accessibilityLabel("Repeat prayer")
 
                         Button(action: onSave) {
                             Label("Save this prayer", systemImage: "bookmark")
                                 .frame(maxWidth: .infinity)
                         }
                         .secondaryAction(theme: theme)
+                        .accessibilityLabel("Save this prayer")
                     }
                 }
             }

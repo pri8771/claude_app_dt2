@@ -1,6 +1,24 @@
 import SwiftUI
 import Foundation
 
+/// Full-screen time-of-day gradient background. Crossfades smoothly when the
+/// band changes (foreground / time passing) by layering every band's gradient
+/// and animating opacity — reliable regardless of gradient interpolation.
+struct TimeBandBackground: View {
+    let timeContext: TimeContext
+
+    var body: some View {
+        ZStack {
+            ForEach(TimeContext.allCases) { band in
+                ThemePalette.palette(for: band).backgroundGradient
+                    .opacity(band == timeContext ? 1 : 0)
+            }
+        }
+        .ignoresSafeArea()
+        .animation(.easeInOut(duration: 0.8), value: timeContext)
+    }
+}
+
 /// The primary call-to-action button styled for a given theme.
 struct AnjaliPrimaryButtonStyle: ButtonStyle {
     let theme: ThemePalette

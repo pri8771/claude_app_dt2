@@ -4,8 +4,9 @@ import Foundation
 ///
 /// Positive signals:
 /// - `+100` the prayer matches an **explicitly** chosen moment
-/// - `+60`  the prayer matches an **inferred** moment (from the time band or a
-///          favourited moment)
+/// - `+60`  the prayer matches a **time-band inferred** moment
+/// - `+20`  the prayer matches a **favourited** moment (lighter than the band)
+/// - `+10`  a matched favourite is **also** compatible with the current band
 /// - `+35`  the prayer's time contexts include the current band
 /// - `+40`  the prayer's deity matches the user's preferred (ishta) deity
 /// - `+15`  the prayer supports the user's preferred mode (Listen/Chant/Silent)
@@ -26,6 +27,8 @@ enum TodayContextEngine {
     // Scoring weights, exposed for tests and clarity.
     static let explicitMomentBonus = 100
     static let inferredMomentBonus = 60
+    static let favoriteMomentBonus = 20
+    static let favoriteMomentTimeCompatBonus = 10
     static let timeContextBonus = 35
     static let preferredDeityBonus = 40
     static let preferredModeBonus = 15
@@ -84,15 +87,23 @@ enum TodayContextEngine {
             score += explicitMomentBonus
         }
 
-        // Inferred moments: from the time band plus the user's favourites.
-        var inferred = Set(input.timeContext.inferredMoments)
-        inferred.formUnion(input.preferredMoments)
-        // Avoid double-counting the explicit moment as inferred.
-        if let explicit = input.explicitMoment {
-            inferred.remove(explicit)
-        }
-        if inferred.contains(where: { prayer.moments.contains($0) }) {
+        // Time-band inferred moments (excluding the explicit one).
+        var band = Set(input.timeContext.inferredMoments)
+        if let explicit = input.explicitMoment { band.remove(explicit) }
+        if band.contains(where: { prayer.moments.contains($0) }) {
             score += inferredMomentBonus
+        }
+
+        // Favourite moments — a lighter, separate signal than the time band.
+        var favourites = Set(input.preferredMoments)
+        if let explicit = input.explicitMoment { favourites.remove(explicit) }
+        let matchedFavourites = favourites.filter { prayer.moments.contains($0) }
+        if !matchedFavourites.isEmpty {
+            score += favoriteMomentBonus
+            // Extra when a matched favourite also fits the current band.
+            if matchedFavourites.contains(where: { band.contains($0) }) {
+                score += favoriteMomentTimeCompatBonus
+            }
         }
 
         if prayer.timeContexts.contains(input.timeContext) {

@@ -83,9 +83,12 @@ at sunset, before sleep.
 | Signal | Score |
 | --- | --- |
 | Matches an explicitly chosen moment | +100 |
-| Matches an inferred moment (time band or favourite) | +60 |
+| Matches a time-band inferred moment | +60 |
+| Matches a favourited moment | +20 |
+| Matched favourite also compatible with the band | +10 |
 | Time contexts include the current band | +35 |
 | Deity matches the user's ishta devata | +40 |
+| Supports the user's preferred mode | +15 |
 | Needs review | −100 |
 
 **Recency penalties** (a completion *deprioritises*, never excludes — same-day

@@ -15,7 +15,7 @@ struct RootView: View {
             }
         }
         .fullScreenCover(item: $coordinator.activePrayer) { prayer in
-            PrayerPlayerView(prayer: prayer)
+            PrayerPlayerView(prayer: prayer, forcedMode: coordinator.forcedMode)
         }
     }
 }

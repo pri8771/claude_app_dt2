@@ -26,7 +26,10 @@ extension Color {
 /// The full visual + copy theme for a single time band. Derived purely from a
 /// `TimeContext`, so it is deterministic and testable.
 struct ThemePalette: Equatable {
+    /// A representative solid colour (used for overlays/scrims).
     let background: Color
+    /// Top-to-bottom gradient colours for the time-of-day lighting.
+    let gradient: [Color]
     let accent: Color
     /// The eyebrow label shown above the headline ("Begin with light").
     let eyebrow: String
@@ -45,11 +48,18 @@ struct ThemePalette: Equatable {
         foreground.opacity(0.7)
     }
 
+    /// The full-screen time-of-day gradient.
+    var backgroundGradient: LinearGradient {
+        LinearGradient(colors: gradient, startPoint: .top, endPoint: .bottom)
+    }
+
     static func palette(for context: TimeContext) -> ThemePalette {
         switch context {
         case .dawn:
+            // Warm rose/amber over deep indigo — soft, pre-sunrise.
             return ThemePalette(
                 background: Color(hex: "20265F"),
+                gradient: [Color(hex: "20265F"), Color(hex: "6E3F5C"), Color(hex: "D08A57")],
                 accent: Color(hex: "F3B85E"),
                 eyebrow: "Begin with light",
                 headline: "The day is waking",
@@ -57,8 +67,10 @@ struct ThemePalette: Equatable {
                 prefersDarkForeground: false
             )
         case .morning:
+            // Bright ivory into golden — awake and light.
             return ThemePalette(
                 background: Color(hex: "FFF4DA"),
+                gradient: [Color(hex: "FFF7E6"), Color(hex: "FCE3A6"), Color(hex: "F6C66B")],
                 accent: Color(hex: "F29A24"),
                 eyebrow: "Speak with clarity",
                 headline: "Carry calm forward",
@@ -66,8 +78,11 @@ struct ThemePalette: Equatable {
                 prefersDarkForeground: true
             )
         case .midday:
+            // Ivory into a more saturated saffron — clear, direct, distinct
+            // from morning.
             return ThemePalette(
                 background: Color(hex: "FFF4DA"),
+                gradient: [Color(hex: "FFF8E1"), Color(hex: "FBD98B"), Color(hex: "F4A52C")],
                 accent: Color(hex: "F29A24"),
                 eyebrow: "Speak with clarity",
                 headline: "A pause at midday",
@@ -75,8 +90,10 @@ struct ThemePalette: Equatable {
                 prefersDarkForeground: true
             )
         case .sunset:
+            // Coral/orange into deep crimson — rich and sacred.
             return ThemePalette(
                 background: Color(hex: "5B1E2D"),
+                gradient: [Color(hex: "E2683C"), Color(hex: "B83A3E"), Color(hex: "5B1E2D")],
                 accent: Color(hex: "F0A94E"),
                 eyebrow: "Return with gratitude",
                 headline: "Set down the day",
@@ -84,8 +101,10 @@ struct ThemePalette: Equatable {
                 prefersDarkForeground: false
             )
         case .night:
+            // Deep indigo into near-black — calm and interior.
             return ThemePalette(
                 background: Color(hex: "091426"),
+                gradient: [Color(hex: "0E1B33"), Color(hex: "0A1222"), Color(hex: "05080F")],
                 accent: Color(hex: "E8A93A"),
                 eyebrow: "Rest in peace",
                 headline: "Let the day settle",

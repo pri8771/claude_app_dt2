@@ -49,11 +49,14 @@ struct Prayer: Identifiable, Codable, Hashable {
     }
 
     /// The modes a user can actually start. Every prayer is always completable
-    /// in Silent (read-only), so a prayer with no listed modes — or one whose
-    /// only modes depend on missing audio — still degrades gracefully rather
-    /// than blocking. Listen falls back to timed text when audio is absent.
+    /// in Silent (read-only), so Silent is guaranteed to be present even if it
+    /// wasn't listed — and a prayer with no listed modes still degrades to
+    /// Silent rather than blocking. Listen falls back to timed text when audio
+    /// is absent.
     var playableModes: [PlayMode] {
-        availableModes.isEmpty ? [.silent] : availableModes
+        var modes = availableModes
+        if !modes.contains(.silent) { modes.append(.silent) }
+        return modes
     }
 
     /// A prayer is eligible to be shown when it has been reviewed and does not

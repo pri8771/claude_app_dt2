@@ -8,10 +8,14 @@ struct TodayView: View {
     @EnvironmentObject private var coordinator: AppCoordinator
 
     @Query private var completions: [PrayerCompletion]
+    @Environment(\.scenePhase) private var scenePhase
 
     /// Recomputed on appearance; the band only needs to be resolved when the
     /// screen is shown.
     @State private var now = Date()
+    /// Which of today's contextual prayers the card is showing (0 = the
+    /// top-ranked selection; "Change" steps through the rest).
+    @State private var cardIndex = 0
 
     private var context: TodayContext {
         let calendar = Calendar.current
@@ -58,21 +62,40 @@ struct TodayView: View {
         return result
     }
 
+    /// Today's contextual prayers in ranked order (selection first).
+    private func todayPrayers(_ context: TodayContext) -> [Prayer] {
+        guard let selected = context.selectedPrayer else { return [] }
+        return [selected] + context.alternatePrayers
+    }
+
     var body: some View {
         let context = context
         let theme = context.theme
+        let prayers = todayPrayers(context)
+        let displayed = prayers.isEmpty ? nil : prayers[min(cardIndex, prayers.count - 1)]
 
         ZStack {
-            theme.background.ignoresSafeArea()
+            TimeBandBackground(timeContext: context.timeContext)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     header(theme: theme, context: context)
 
-                    if let prayer = context.selectedPrayer {
-                        PrayerCardView(prayer: prayer, theme: theme) {
-                            coordinator.play(prayer)
-                        }
+                    if let prayer = displayed {
+                        PrayerCardView(
+                            prayer: prayer,
+                            theme: theme,
+                            canChange: prayers.count > 1,
+                            onBegin: { coordinator.play(prayer) },
+                            onSilent: { coordinator.play(prayer, forcedMode: .silent) },
+                            onChange: {
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    cardIndex = (cardIndex + 1) % prayers.count
+                                }
+                            }
+                        )
+                        .id(prayer.id)
+                        .transition(.opacity)
                     } else {
                         emptyState(theme: theme)
                     }
@@ -81,7 +104,15 @@ struct TodayView: View {
             }
         }
         .preferredColorScheme(theme.prefersDarkForeground ? .light : .dark)
-        .onAppear { now = Date() }
+        .onAppear {
+            now = Date()
+            cardIndex = 0
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                withAnimation(.easeInOut(duration: 0.8)) { now = Date() }
+            }
+        }
     }
 
     private func header(theme: ThemePalette, context: TodayContext) -> some View {

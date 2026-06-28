@@ -16,6 +16,9 @@ final class AppCoordinator: ObservableObject {
     @Published var selectedTab: AppTab = .today
     /// The prayer currently presented in the full-screen player, if any.
     @Published var activePrayer: Prayer?
+    /// When set, the player opens locked to this mode (e.g. the Today card's
+    /// "Silent" action), overriding the user's preferred mode.
+    @Published var forcedMode: PlayMode?
     /// A moment the user navigated into from a deep link / browse.
     @Published var pendingMoment: Moment?
     /// Prayers completed during this app session (in-memory only). Used by the
@@ -29,8 +32,9 @@ final class AppCoordinator: ObservableObject {
         self.library = library
     }
 
-    /// Present the player for a prayer.
-    func play(_ prayer: Prayer) {
+    /// Present the player for a prayer, optionally locked to a specific mode.
+    func play(_ prayer: Prayer, forcedMode: PlayMode? = nil) {
+        self.forcedMode = forcedMode
         activePrayer = prayer
     }
 
@@ -42,6 +46,7 @@ final class AppCoordinator: ObservableObject {
 
     func dismissPlayer() {
         activePrayer = nil
+        forcedMode = nil
     }
 
     /// Handle a parsed deep link.

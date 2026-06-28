@@ -65,6 +65,11 @@ final class PlayerController: ObservableObject {
         audioPlayer = nil
     }
 
+    /// Mark the session complete immediately (e.g. the Silent "Complete" CTA).
+    func completeNow() {
+        finish()
+    }
+
     private func startTimer() {
         timer = Timer.publish(every: 0.1, on: .main, in: .common)
             .autoconnect()

@@ -91,6 +91,38 @@ final class TodayContextEngineTests: XCTestCase {
         XCTAssertEqual(context.selectedPrayer?.id, "listen")
     }
 
+    // MARK: Favourite-moment weighting
+
+    func testFavouriteMomentScoresLessThanTimeBand() {
+        // Night infers .sleep. "band" matches the band; "fav" only matches a
+        // favourite (.travel), which is not compatible with night.
+        let band = prayer("band", moments: [.sleep])
+        let fav = prayer("fav", moments: [.travel])
+        let input = TodayEngineInput(
+            prayers: [band, fav],
+            timeContext: .night,
+            preferredMoments: [.travel]
+        )
+        XCTAssertEqual(TodayContextEngine.score(band, input: input), 60) // inferred only
+        XCTAssertEqual(TodayContextEngine.score(fav, input: input), 20)  // favourite only
+        XCTAssertGreaterThan(
+            TodayContextEngine.score(band, input: input),
+            TodayContextEngine.score(fav, input: input)
+        )
+    }
+
+    func testFavouriteMomentCompatibleWithBandAddsExtra() {
+        // .sleep is both the night-band inferred moment and a favourite:
+        // band (+60) + favourite (+20) + compatibility (+10) = 90.
+        let p = prayer("p", moments: [.sleep])
+        let input = TodayEngineInput(
+            prayers: [p],
+            timeContext: .night,
+            preferredMoments: [.sleep]
+        )
+        XCTAssertEqual(TodayContextEngine.score(p, input: input), 90)
+    }
+
     // MARK: Recency penalties
 
     func testRecencyPenaltyValuesForNormalRotation() {
