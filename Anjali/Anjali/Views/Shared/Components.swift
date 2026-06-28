@@ -86,6 +86,8 @@ struct ModeChip: View {
             .clipShape(Capsule())
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("\(mode.displayName) mode")
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 }
 
@@ -110,12 +112,13 @@ struct FlameProgressView: View {
                 .rotationEffect(.degrees(-90))
                 .animation(reduceMotion ? nil : .linear(duration: 0.2), value: progress)
             Image(systemName: "flame.fill")
-                .font(.system(size: 34))
+                .font(.largeTitle)
                 .foregroundStyle(theme.accent)
                 .shadow(color: theme.accent.opacity(0.6), radius: 12)
                 // Gentle pulse — held steady when Reduce Motion is on.
                 .scaleEffect(reduceMotion ? 1 : 1 + 0.05 * sin(progress * .pi * 8))
         }
-        .accessibilityHidden(true)
+        .accessibilityElement()
+        .accessibilityLabel("Prayer progress, \(Int((progress * 100).rounded())) percent complete")
     }
 }

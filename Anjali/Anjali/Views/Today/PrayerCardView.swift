@@ -13,8 +13,6 @@ struct PrayerCardView: View {
     let onSilent: () -> Void
     let onChange: () -> Void
 
-    @ScaledMetric(relativeTo: .title) private var typeScale: CGFloat = 1
-
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack {
@@ -28,7 +26,7 @@ struct PrayerCardView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(prayer.title)
-                    .font(.system(size: 26 * typeScale, weight: .semibold, design: .serif))
+                    .font(.system(.title2, design: .serif, weight: .semibold))
                     .foregroundStyle(theme.foreground)
                 Text(prayer.transliteration)
                     .font(.callout)
@@ -72,7 +70,7 @@ struct PrayerCardView: View {
             }
             .buttonStyle(AnjaliPrimaryButtonStyle(theme: theme))
             .accessibilityLabel("Begin prayer")
-            .accessibilityHint("Opens the prayer in your preferred mode")
+            .accessibilityHint("Plays this prayer in your preferred mode")
 
             // Secondary row: Silent + Change
             HStack(spacing: 12) {
@@ -82,7 +80,7 @@ struct PrayerCardView: View {
                 }
                 .secondaryCardAction(theme: theme)
                 .accessibilityLabel("Begin in silent mode")
-                .accessibilityHint("Opens the prayer as text only, no audio")
+                .accessibilityHint("Plays this prayer as text only, no sound")
 
                 if canChange {
                     Button(action: onChange) {
@@ -91,7 +89,7 @@ struct PrayerCardView: View {
                     }
                     .secondaryCardAction(theme: theme)
                     .accessibilityLabel("Change prayer")
-                    .accessibilityHint("Shows the next prayer for this moment")
+                    .accessibilityHint("Shows a different prayer for this moment")
                 }
             }
         }

@@ -16,7 +16,7 @@ struct PrayerPlayerView: View {
     @StateObject private var controller: PlayerController
     @State private var mode: PlayMode
     @State private var showCompletion = false
-    @ScaledMetric(relativeTo: .title) private var typeScale: CGFloat = 1
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     // Today's theme drives the player background too.
     private let theme = ThemePalette.palette(for: TimeBandResolver.timeContext(for: Date()))
@@ -48,7 +48,8 @@ struct PrayerPlayerView: View {
         .onChange(of: controller.isFinished) { _, finished in
             if finished {
                 recordCompletion()
-                withAnimation { showCompletion = true }
+                if reduceMotion { showCompletion = true }
+                else { withAnimation { showCompletion = true } }
             }
         }
         .onDisappear { controller.stop() }
@@ -76,14 +77,14 @@ struct PrayerPlayerView: View {
             ScrollView {
                 VStack(spacing: 22) {
                     Text(prayer.title)
-                        .font(.system(size: 22 * typeScale, weight: .semibold, design: .serif))
+                        .font(.system(.title2, design: .serif, weight: .semibold))
                         .foregroundStyle(theme.foreground)
 
                     PrayerTextView(
                         prayer: prayer,
                         scriptPreference: settings.scriptPreference,
                         theme: theme,
-                        devanagariSize: 34
+                        primaryStyle: .largeTitle
                     )
 
                     Text(prayer.meaning)
@@ -132,14 +133,14 @@ struct PrayerPlayerView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     Text(prayer.title)
-                        .font(.system(size: 22 * typeScale, weight: .semibold, design: .serif))
+                        .font(.system(.title2, design: .serif, weight: .semibold))
                         .foregroundStyle(theme.foreground)
 
                     PrayerTextView(
                         prayer: prayer,
                         scriptPreference: settings.scriptPreference,
                         theme: theme,
-                        devanagariSize: 34
+                        primaryStyle: .largeTitle
                     )
 
                     Text(prayer.meaning)
@@ -182,7 +183,8 @@ struct PrayerPlayerView: View {
             }
         }
         .frame(height: 4)
-        .accessibilityHidden(true)
+        .accessibilityElement()
+        .accessibilityLabel("Prayer progress, \(Int((controller.progress * 100).rounded())) percent complete")
     }
 
     // MARK: Shared subviews
@@ -209,12 +211,11 @@ struct PrayerPlayerView: View {
     private var modePicker: some View {
         HStack(spacing: 10) {
             ForEach(prayer.playableModes) { available in
+                // ModeChip carries its own VoiceOver label + button/selected traits.
                 ModeChip(mode: available, isSelected: available == mode, theme: theme) {
                     mode = available
                     controller.setMode(available)
                 }
-                .accessibilityLabel("\(available.displayName) mode")
-                .accessibilityAddTraits(available == mode ? [.isSelected] : [])
             }
         }
     }
@@ -275,7 +276,8 @@ struct PrayerPlayerView: View {
 
     private func repeatPrayer() {
         // The user explicitly wants this prayer again — do not deprioritise it.
-        withAnimation { showCompletion = false }
+        if reduceMotion { showCompletion = false }
+        else { withAnimation { showCompletion = false } }
         controller.reset()
         controller.start()
     }

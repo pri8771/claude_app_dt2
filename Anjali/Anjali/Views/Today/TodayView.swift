@@ -16,8 +16,7 @@ struct TodayView: View {
     /// Which of today's contextual prayers the card is showing (0 = the
     /// top-ranked selection; "Change" steps through the rest).
     @State private var cardIndex = 0
-    /// Dynamic Type multiplier for the display headline.
-    @ScaledMetric(relativeTo: .largeTitle) private var typeScale: CGFloat = 1
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var context: TodayContext {
         let calendar = Calendar.current
@@ -91,9 +90,9 @@ struct TodayView: View {
                             onBegin: { coordinator.play(prayer) },
                             onSilent: { coordinator.play(prayer, forcedMode: .silent) },
                             onChange: {
-                                withAnimation(.easeInOut(duration: 0.25)) {
-                                    cardIndex = (cardIndex + 1) % prayers.count
-                                }
+                                let advance = { cardIndex = (cardIndex + 1) % prayers.count }
+                                if reduceMotion { advance() }
+                                else { withAnimation(.easeInOut(duration: 0.25)) { advance() } }
                             }
                         )
                         .id(prayer.id)
@@ -112,7 +111,8 @@ struct TodayView: View {
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
-                withAnimation(.easeInOut(duration: 0.8)) { now = Date() }
+                if reduceMotion { now = Date() }
+                else { withAnimation(.easeInOut(duration: 0.8)) { now = Date() } }
             }
         }
     }
@@ -124,7 +124,7 @@ struct TodayView: View {
                 .tracking(2)
                 .foregroundStyle(theme.accent)
             Text(context.headline)
-                .font(.system(size: 30 * typeScale, weight: .semibold, design: .serif))
+                .font(.system(.title, design: .serif, weight: .semibold))
                 .foregroundStyle(theme.foreground)
                 .minimumScaleFactor(0.7)
             Text(context.subheadline)

@@ -6,6 +6,7 @@ import SwiftUI
 ///     favourite moments, and an optional reminder opt-in.
 struct OnboardingView: View {
     @EnvironmentObject private var settings: AppSettings
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var page = 0
 
     // Local draft of preferences, committed on finish.
@@ -15,7 +16,6 @@ struct OnboardingView: View {
     @State private var favoriteMoments: Set<Moment> = []
     @State private var remindersOn = false
     @State private var showReminderDeniedNote = false
-    @ScaledMetric(relativeTo: .largeTitle) private var typeScale: CGFloat = 1
 
     private let theme = ThemePalette.palette(for: .dawn)
 
@@ -58,7 +58,7 @@ struct OnboardingView: View {
         VStack(spacing: 16) {
             Spacer()
             Text("Anjali")
-                .font(.system(size: 64 * typeScale, weight: .light, design: .serif))
+                .font(.system(.largeTitle, design: .serif, weight: .light))
                 .foregroundStyle(theme.accent)
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
@@ -68,7 +68,7 @@ struct OnboardingView: View {
                 .multilineTextAlignment(.center)
             Spacer()
             Button {
-                withAnimation { page = 1 }
+                if reduceMotion { page = 1 } else { withAnimation { page = 1 } }
             } label: {
                 Text("Continue")
                     .frame(maxWidth: .infinity)
@@ -252,6 +252,7 @@ struct OnboardingView: View {
     }
 
     private func complete() {
-        withAnimation { settings.hasCompletedOnboarding = true }
+        if reduceMotion { settings.hasCompletedOnboarding = true }
+        else { withAnimation { settings.hasCompletedOnboarding = true } }
     }
 }
