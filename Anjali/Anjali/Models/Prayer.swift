@@ -12,6 +12,37 @@ struct PrayerText: Codable, Hashable {
     }
 }
 
+/// Sourcing + human-review trail for a prayer's sacred text. `reviewer` and
+/// `reviewedOn` stay empty until a *named* human (cultural / theological)
+/// reviewer signs off. Release is gated on that sign-off — see
+/// `Scripts/validate_prayers.py --require-signoff` and `.github/workflows/release-gate.yml`.
+/// This is the executable form of the content-integrity guarantee in
+/// `CONTENT_GUIDELINES.md`.
+struct Provenance: Codable, Hashable {
+    /// A specific scriptural / traditional citation for the text (best-effort,
+    /// still subject to the human sign-off below).
+    let sourceReference: String
+    /// The named human who reviewed and approved this text. Empty (or the
+    /// placeholder `"seed"`) means *not yet* signed off.
+    let reviewer: String
+    /// ISO-8601 date the sign-off was recorded. Empty until reviewed.
+    let reviewedOn: String
+
+    /// The "not yet reviewed" sentinel. Used as the model default so older
+    /// call sites/tests keep compiling; real prayers carry their decoded
+    /// provenance, and the release gate blocks anything still `.unsigned`.
+    static let unsigned = Provenance(sourceReference: "", reviewer: "", reviewedOn: "")
+
+    /// True only when a named human has recorded a sign-off. The release gate
+    /// refuses to ship any prayer where this is false.
+    var isHumanSignedOff: Bool {
+        let name = reviewer.trimmingCharacters(in: .whitespaces).lowercased()
+        return !name.isEmpty
+            && name != "seed"
+            && !reviewedOn.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+}
+
 /// A single micro-prayer. This is immutable reference content loaded from the
 /// bundled `prayers.json`; it is *not* a SwiftData model. User-generated state
 /// (completions, favorites) lives in separate SwiftData models.
@@ -30,6 +61,12 @@ struct Prayer: Identifiable, Codable, Hashable {
     let transliteration: String
     let meaning: String
     let sourceTitle: String
+    /// Sourcing + human-review trail. Every shipped prayer must carry a citation,
+    /// and release is gated on a named human sign-off (`provenance.isHumanSignedOff`).
+    /// Defaults to `.unsigned` so existing memberwise-init call sites keep compiling;
+    /// real prayers decode their provenance from `prayers.json`, and the
+    /// content-validator/release gate enforce presence + sign-off.
+    var provenance: Provenance = .unsigned
     let audioAssetName: String?
     let isReviewed: Bool
     let needsReview: Bool

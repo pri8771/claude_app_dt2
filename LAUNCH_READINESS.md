@@ -2,7 +2,7 @@
 
 > _Updated 2026-06-30 to match the shipped product and launch scope. This file is the canonical launch-scope artifact for Anjali._
 
-> **Anjali** is a Hindu short-form micro-prayer app for iOS — "a sacred pause, not a session." You open it, receive a single prayer chosen for the moment and the time of day, complete it in 10–60 seconds in Listen / Chant / Silent mode, and close the app a little steadier. It is a daily ritual object, not a meditation library, puja guide, bhajan player, astrology app, or content feed. **Implementation maturity: a working SwiftUI app** — 27 app Swift files (+6 test, ~2.6k non-blank LOC), a real Xcode 16 project (`objectVersion 77`, file-system synchronized groups), 22 reviewed bundled prayers in `prayers.json`, a content pipeline (CSV catalog + Python validator), 6 XCTest suites covering the deterministic core, and a full App Store doc set. The core loop (open → Today card → Begin → player → completion → record) is wired end-to-end in code. **The one caveat that gates everything: the project has never been compiled** — it was authored by an agent without a Swift toolchain, so the build/test pass (`./Scripts/build.sh`) must be run on a Mac before any other launch step. There is no app icon, no bundled audio, and no privacy manifest yet.
+> **Anjali** is a Hindu short-form micro-prayer app for iOS — "a sacred pause, not a session." You open it, receive a single prayer chosen for the moment and the time of day, complete it in 10–60 seconds in Listen / Chant / Silent mode, and close the app a little steadier. It is a daily ritual object, not a meditation library, puja guide, bhajan player, astrology app, or content feed. **Implementation maturity: a working SwiftUI app** — 27 app Swift files (+6 test, ~2.6k non-blank LOC), a real Xcode 16 project (`objectVersion 77`, file-system synchronized groups), 22 reviewed bundled prayers in `prayers.json`, a content pipeline (CSV catalog + Python validator), 6 XCTest suites covering the deterministic core, and a full App Store doc set. The core loop (open → Today card → Begin → player → completion → record) is wired end-to-end in code. **The one caveat that gates everything: the project has never been compiled** — it was authored by an agent without a Swift toolchain, so the build/test pass (`./Scripts/build.sh`) must be run on a Mac before any other launch step. There is no app icon and no bundled audio yet; a `PrivacyInfo.xcprivacy` manifest was added 2026-06-30.
 
 ---
 
@@ -126,10 +126,10 @@ Accessibility affordances are coded but unverified on-device. (Throughout the vi
 - Dynamic Type uses semantic font styles with `minimumScaleFactor` on headlines.
 - _Partial:_ none of this is verified on a device/simulator (largest-text clipping, VoiceOver reading order, contrast on all five bands). It is in the smoke-test checklist (`SETUP.md`) but not yet executed.
 
-### F13. Bundled prayer content — 22 reviewed prayers — **Built** (provenance enforcement = Partial)
+### F13. Bundled prayer content — 22 reviewed prayers — **Built** (provenance gate enforced; 0/22 human sign-offs)
 The seed set. (`Resources/prayers.json`, `Content/`.)
 - 22 prayers, all `isReviewed: true` / `needsReview: false`, covering all 9 deities + universal śānti mantras and all five time bands, each with Devanagari, IAST transliteration, plain meaning, and an honest `sourceTitle`.
-- _Partial / risk:_ there is **no per-prayer reviewer-identity or provenance field** in the `Prayer` model or `prayers.json`. The pipeline tracks `reviewer_name` in CSV, but `export_catalog.py` hardcodes it to `"seed"` and `validate_prayers.py` does **not** require it. So the conversation's central trust gate (named human sign-off that blocks release) is **process-only, not enforced**. See §7 BLK-2.
+- _Now enforced (2026-06-30):_ a `provenance` field (`sourceReference`, `reviewer`, `reviewedOn`) is on the `Prayer` model and all 22 `prayers.json` entries; `validate_prayers.py` requires it structurally (CI stays green) and `--require-signoff` (the new `release-gate` workflow) **blocks release** until a named human sets `reviewer` + `reviewedOn`. `export_catalog.py` now exports the real reviewer (no longer hardcoded `"seed"`). Today **0/22** are signed off, so the gate correctly blocks. The remaining work is the human review itself, not the mechanism. See §7 BLK-2.
 
 ---
 
@@ -203,9 +203,9 @@ Each MVP feature maps to a single launch gate (full criteria in §2).
 | F10 | Offline load | Loads bundled JSON; skips bad records; works in airplane mode; no crash on load failure. |
 | F11 | Theming | Five distinct band palettes + correct foreground polarity; tests green. |
 | F12 | Accessibility | VoiceOver/Dynamic Type/Reduce Motion/contrast verified on device (**gate not yet met**). |
-| F13 | Content | 22 reviewed prayers, honest sources, validator passes; **named provenance gate not yet met**. |
+| F13 | Content | 22 prayers, honest sources, validator passes; **provenance gate enforced — 0/22 human sign-offs recorded**. |
 
-**Hard launch gates that are not yet met:** a real device/simulator build+test pass (§7 BLK-1), enforced per-prayer provenance/sign-off (BLK-2), F12 accessibility verification, a real app icon (BLK-3), and a privacy manifest (BLK-4).
+**Hard launch gates that are not yet met:** a real device/simulator build+test pass (§7 BLK-1), a named human sign-off on all 22 prayers (BLK-2 — the enforcement gate is now built and blocking), F12 accessibility verification, and a real app icon (BLK-3). _(BLK-4 privacy manifest: closed 2026-06-30.)_
 
 ---
 
@@ -214,8 +214,8 @@ Each MVP feature maps to a single launch gate (full criteria in §2).
 - **Never compiled.** All Swift was authored without a toolchain; `STATIC_AUDIT.md` is a manual "compile-in-my-head" pass, not a build. `./Scripts/build.sh` has not been run on macOS. Until it passes, "Built" means "written and statically reviewed," not "verified to compile/run."
 - **No audio shipped.** Every prayer's `audioAssetName` is `null`; the "Listen" mode is real but currently always degrades to timed text. The first 20 recordings are planned but unrecorded (`Content/hero_prayers.md`).
 - **App icon is an empty placeholder.** `AppIcon.appiconset/Contents.json` has a 1024 slot with no `filename`; the build will warn and the App Store will reject without artwork.
-- **No privacy manifest.** There is no `PrivacyInfo.xcprivacy`, yet the app uses `UserDefaults` (an Apple "required-reason" API). Required for App Store submission as of 2024.
-- **Provenance is process-only.** Reviewer identity and source provenance live in docs/CSV (`reviewer_name` hardcoded to `"seed"`), not in the shipping data model, and are not enforced by the validator or the app.
+- **Privacy manifest added (2026-06-30).** `PrivacyInfo.xcprivacy` declares no tracking, no data collected, and the `UserDefaults` required-reason `CA92.1`; auto-included via Xcode 16 synchronized groups.
+- **Provenance enforced, not yet human-signed.** Every prayer now carries a `provenance` citation in the shipping model + JSON, and the validator/`release-gate` block release until a named human signs off — but 0/22 are signed today, so the content is *sourced*, not yet human-*verified*.
 - **Reminder times are fixed.** 06:30 / 18:30 / 21:30 only; no per-user custom time UI.
 - **`Me` may be over-scoped.** It is a settings page, not a "pause"; the conversation flagged it as a trim candidate before TestFlight.
 - **Today is time-band deterministic, not truly daily-rotating.** Selection re-resolves on appearance/foreground using on-device completion recency; there is no notion of "today's anchor as of midnight" beyond the recency buckets.
@@ -230,9 +230,9 @@ Each MVP feature maps to a single launch gate (full criteria in §2).
 ### Launch-blocking (must fix before TestFlight / App Store)
 
 - **BLK-1 — The app has never been built or tested.** *Where:* whole project; `STATIC_AUDIT.md`, `Scripts/build.sh`. *Why blocking:* nothing is verified to compile, link, or run; SwiftData schema creation, AVFoundation session setup, and `@MainActor` isolation are only manually reviewed. Run `./Scripts/build.sh` on macOS (Xcode 16+, iOS 17 sim) to `** BUILD SUCCEEDED **` + `** TEST SUCCEEDED **` and execute the `SETUP.md` smoke test before anything else.
-- **BLK-2 — Content provenance / reviewer sign-off is not enforced.** *Where:* `Models/Prayer.swift` (no provenance fields), `Resources/prayers.json`, `Scripts/validate_prayers.py`, `Scripts/export_catalog.py` (line 61 hardcodes `reviewer_name = "seed"`). *Why blocking:* the single biggest trust risk for a devotional app is a mis-sourced or culturally flattened prayer, and the conversation's explicit release bar — per-prayer attribution + translation provenance + a named human reviewer sign-off that blocks release if empty — is documented but **not** wired into the data or the validator. A real (named) reviewer must sign off each of the 22 prayers, and that sign-off should be a required, validated field that gates release. Until then, "22 reviewed" is an unverifiable claim.
+- **BLK-2 — Content provenance / reviewer sign-off (ENFORCEMENT BUILT 2026-06-30; human sign-off pending — still blocking).** *What changed:* a `provenance` field (`sourceReference` + `reviewer` + `reviewedOn`) is now on `Models/Prayer.swift` and all 22 `Resources/prayers.json` entries; `Scripts/validate_prayers.py` requires it (and a `--require-signoff` release gate, wired as `.github/workflows/release-gate.yml`, fails until a named human signs off); `Scripts/export_catalog.py` exports the real `reviewer` instead of hardcoded `"seed"`. Verified here with Swift 6.3 (model compiles, `prayers.json` decodes 22/22) and Python (structural passes; sign-off gate blocks all 22). *Why still blocking:* **0/22** prayers carry a named human sign-off, so the gate correctly blocks release. The remaining step is the human review itself — a named cultural/theological reviewer sets `provenance.reviewer` + `reviewedOn` on each prayer.
 - **BLK-3 — No app icon.** *Where:* `Assets.xcassets/AppIcon.appiconset/Contents.json` (placeholder, no image). *Why blocking:* App Store submission and even a clean archive require a real 1024 icon; `app_icon_spec.md` defines the brief.
-- **BLK-4 — No privacy manifest (`PrivacyInfo.xcprivacy`).** *Where:* absent from the app target. *Why blocking:* the app accesses `UserDefaults` (NSPrivacyAccessedAPICategoryUserDefaults, a required-reason API); Apple requires a privacy manifest declaring the reason. The App Privacy "nutrition label" (Data Not Collected) is documented but the on-device manifest is missing. (Not currently listed in `RELEASE_CHECKLIST.md` — add it.)
+- **BLK-4 — Privacy manifest (RESOLVED 2026-06-30).** `Anjali/Anjali/PrivacyInfo.xcprivacy` now declares `NSPrivacyTracking=false`, no collected data types, and the `UserDefaults` required-reason `CA92.1`; it is auto-included via the project's Xcode 16 file-system synchronized groups (verified `plutil -lint` clean). Confirm the App Privacy label (Data Not Collected) matches at submission.
 - **BLK-5 — Accessibility unverified on device.** *Where:* F12; all views. *Why blocking for a calm/reverent app:* VoiceOver reading order, largest-Dynamic-Type clipping, and text contrast on all five band backgrounds are coded but never checked. A devotional app that is unreadable at large type or silent to VoiceOver fails its own dignity bar. Verify per the `SETUP.md` accessibility checklist.
 
 ### Non-blocking (ship-with, fix in a fast-follow)
@@ -251,16 +251,16 @@ Each MVP feature maps to a single launch gate (full criteria in §2).
 
 ## 8. Production-Readiness Assessment
 
-**Current estimated readiness: ~63%.**  _(Recalibrated from 70% on 2026-06-30 after an independent code audit that weighted 'never compiled' more heavily.)_
+**Current estimated readiness: ~68%.**  _(Audit-recalibrated to 63% on 2026-06-30, then raised to ~68% after closing BLK-4 and building the BLK-2 enforcement gate — both verified locally with Swift 6.3 + Python.)_
 
-Justification: the product is sharply defined and the code is complete and coherent for the core loop, with a real Xcode project, a serious content pipeline, and meaningful unit tests on the deterministic core — well past "Planning." But it crosses no launch gate that requires a machine or a human reviewer: it has **never been compiled or run** (BLK-1), provenance/sign-off is **not enforced** (BLK-2), and it is missing an **icon** (BLK-3) and a **privacy manifest** (BLK-4), with accessibility **unverified** (BLK-5). Those are the difference between "well-built on paper" and "shippable," which is why this is ~63%, not higher. Closing the ordered checklist below moves it to 80–90%.
+Justification: the product is sharply defined and the code is complete and coherent for the core loop, with a real Xcode project, a serious content pipeline, and meaningful unit tests on the deterministic core — well past "Planning." But it crosses no launch gate that requires a machine or a human reviewer: it has **never been built/run as a full app** (BLK-1) and is missing an **icon** (BLK-3), with accessibility **unverified** (BLK-5). The top trust gate is now **enforced in code** — `provenance` is a model field + a CI release gate (BLK-2) — but **0/22** prayers carry a named human sign-off, so it correctly still blocks; and the **privacy manifest is now present** (BLK-4 closed). The content model was compiled and the JSON decoded here (Swift 6.3), but the full Xcode app/UI still has not. Those remaining gaps are why this is ~68%, not higher. Closing the ordered checklist below moves it to 80–90%.
 
 **Ordered remaining-work checklist to reach 80–90% production-ready:**
 1. **Build & test on macOS.** Run `./Scripts/build.sh` (Xcode 16+, iOS 17 sim) to BUILD + TEST SUCCEEDED; fix any compiler/linker errors the static audit missed. *(Closes BLK-1; gets to ~78%.)*
 2. **Execute the `SETUP.md` smoke test** on a fresh simulator (onboarding, persistence ×4, Today/Begin/Silent/Change, player + no-audio fallback, completion Done/Repeat/Save, Moments, Me, deep links, force-quit, airplane mode).
-3. **Enforce content provenance (BLK-2).** Add reviewer/provenance fields (e.g. `reviewerName`, `sourceProvenance`) to the `Prayer` model + `prayers.json`, make `validate_prayers.py` (and CI) fail on empty/`"seed"` values, and have a named human reviewer actually sign off all 22 prayers. *(Closes the top trust risk; ~83%.)*
+3. **Record the human sign-off (BLK-2).** The enforcement is built and verified — `provenance` model field + `validate_prayers.py --require-signoff` + the `release-gate` workflow + real export. What remains is for a named cultural/theological reviewer to set `provenance.reviewer` + `provenance.reviewedOn` on all 22 prayers (the gate blocks until then). *(Closes the top trust risk; ~83%.)*
 4. **Add the app icon (BLK-3).** Produce the 1024 master per `app_icon_spec.md`, drop it into `AppIcon.appiconset`, confirm no missing-icon warnings.
-5. **Add `PrivacyInfo.xcprivacy` (BLK-4).** Declare the UserDefaults required-reason API; confirm the App Privacy label (Data Not Collected) matches. Add this line to `RELEASE_CHECKLIST.md` §8.
+5. **~~Add `PrivacyInfo.xcprivacy` (BLK-4)~~ — DONE 2026-06-30.** Manifest added (no tracking / no data collected / UserDefaults `CA92.1`), auto-wired via synchronized groups, lint-clean; added to `RELEASE_CHECKLIST.md` §8. Confirm the App Privacy label matches at submission.
 6. **Verify accessibility (BLK-5).** VoiceOver pass, largest Dynamic Type (no clipping), Reduce Motion, and contrast on all five bands.
 7. **Product decision on `Me` and reminders scope.** Decide whether `Me` ships as-is or trims to essentials; confirm fixed reminder times are acceptable for v1.
 8. **Fix NB-1** (carry the `FavoritePrayer` id into delete) and **reconcile docs** (NB-4/NB-5/NB-6 — category, scholar claim, marketing Markdown).
@@ -282,13 +282,13 @@ Justification: the product is sharply defined and the code is complete and coher
 
 **Content & safety (the trust gate)**
 - [ ] All 22 prayers carry honest `sourceTitle`; **no fabricated Sanskrit** (`CONTENT_GUIDELINES.md`).
-- [ ] **Named human reviewer has signed off every prayer** and the sign-off is an enforced, validated field (BLK-2) — not `"seed"`.
+- [ ] **Named human reviewer has signed off every prayer** (BLK-2). _Enforcement is built — `provenance` field + `validate_prayers.py --require-signoff` + the `release-gate` workflow — and currently blocks all 22; what remains is the human review itself._
 - [ ] `beta_testing_plan.md`'s "verified by Sanskrit scholars" claim is true or softened to match reality.
 - [ ] Tone audit: no fear-based / transactional / sectarian framing; meanings plain and faithful.
 
 **App Store / privacy**
 - [ ] Real **app icon** added (BLK-3); no missing-icon warnings.
-- [ ] **`PrivacyInfo.xcprivacy`** present declaring the UserDefaults required-reason API (BLK-4).
+- [x] **`PrivacyInfo.xcprivacy`** present declaring the UserDefaults required-reason API (BLK-4) — added 2026-06-30, auto-included via synchronized groups.
 - [ ] **App Privacy label: Data Not Collected**; no tracking; no third-party SDKs; matches `privacy_policy.md`.
 - [ ] **Export compliance:** `ITSAppUsesNonExemptEncryption = NO` (already in `Info.plist`).
 - [ ] **Age rating 4+** (questionnaire all "None"); **no in-app purchases** configured.

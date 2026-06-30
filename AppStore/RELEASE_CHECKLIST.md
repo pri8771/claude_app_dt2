@@ -121,3 +121,23 @@ python3 Scripts/validate_prayers.py     # content integrity
 python3 Scripts/export_catalog.py       # refresh Content/ CSVs (expect no diff)
 ./Scripts/build.sh                       # clean build + tests (macOS); logs -> BuildReports/
 ```
+
+---
+
+## Content provenance & privacy gates (added 2026-06-30)
+
+These are now **enforced**, not advisory:
+
+- [x] **Privacy manifest** — `Anjali/Anjali/PrivacyInfo.xcprivacy` is present (no tracking, no data
+  collected, `UserDefaults` required-reason `CA92.1`) and auto-included via the project's Xcode 16
+  file-system synchronized groups. Confirm the App Privacy "Data Not Collected" label matches.
+- [ ] **Content sign-off gate (release-blocking)** — every prayer in `prayers.json` must carry a
+  `provenance.reviewer` (a named human) and `provenance.reviewedOn` (ISO date). Run, and require green,
+  before any release:
+  ```
+  python3 Scripts/validate_prayers.py              # structural (also runs in CI on every push)
+  python3 Scripts/validate_prayers.py --require-signoff   # the release gate — must pass before shipping
+  ```
+  The `.github/workflows/release-gate.yml` workflow runs the sign-off gate on `v*` tags and on demand.
+  As of 2026-06-30 the gate **correctly blocks** (0/22 signed off): the citations are author-supplied
+  and still require a named cultural/theological reviewer's sign-off.

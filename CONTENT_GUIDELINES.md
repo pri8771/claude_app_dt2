@@ -74,3 +74,25 @@ Each `Prayer` carries two booleans:
 - Audio is **optional and local only** in the MVP. A missing asset must degrade
   gracefully to a timed text experience — never an error.
 - Any future audio must be a faithful, respectful recitation, clearly sourced.
+
+---
+
+## Provenance & sign-off (enforced 2026-06-30)
+
+Every prayer carries a `provenance` block in `Anjali/Anjali/Resources/prayers.json`:
+
+```json
+"provenance": {
+  "sourceReference": "Mahāmṛtyuñjaya / Tryambakam mantra (Ṛgveda 7.59.12)",
+  "reviewer": "",        // set to the NAMED human who reviewed and approved this text
+  "reviewedOn": ""       // set to the ISO date (YYYY-MM-DD) of that sign-off
+}
+```
+
+- `sourceReference` is **required** and validated structurally (CI `validate_prayers.py`).
+- A prayer is only **cleared to ship** when a *named* human sets both `reviewer` (not empty / not
+  `"seed"`) and a valid `reviewedOn` date. The release gate (`validate_prayers.py --require-signoff`,
+  run by `.github/workflows/release-gate.yml`) blocks release until **all** prayers are signed off.
+- This makes the "named human sign-off that blocks release" rule executable rather than aspirational.
+  Do not bulk-fill `reviewer` to satisfy the gate — each sign-off must represent a real review of that
+  prayer's text, transliteration, translation, and attribution.
