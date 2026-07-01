@@ -37,10 +37,19 @@ smoke tests), [`README.md`](README.md) (listing copy),
 
 ## 4. Audio status check
 
-- [ ] **20 hero prayers recorded** and bundled per
-      [`../Content/hero_prayers.md`](../Content/hero_prayers.md) and
-      [`../Content/audio_spec.md`](../Content/audio_spec.md) (AAC/m4a, −16 LUFS),
-      each manifest row `approved_by` + `bundled: true`.
+- [ ] **BLOCKER — current audio is provisional, not shippable.** The 20 hero
+      prayers are bundled with placeholder audio from two non-reviewed
+      sources: 11 are macOS `Lekha` (Hindi) text-to-speech, and 9 are Suno
+      AI-generated tracks copied from the sibling `digital_temple` project
+      (see the status table in
+      [`../Content/hero_prayers.md`](../Content/hero_prayers.md#current-v1-audio-status--provisional-not-shippable)).
+      Neither source is pronunciation-reviewed or meets
+      [`../Content/audio_spec.md`](../Content/audio_spec.md) (no human voice,
+      no −16 LUFS normalisation, no bell/edit pass), and 4 of the 9
+      `digital_temple` tracks are full-length songs (up to 3 minutes) standing
+      in for what should be 15–20s mantras. **Do not submit until every hero
+      prayer is replaced with a reviewed human recitation** matching its
+      target duration, with `pronunciation_reviewer` + `approved_by` recorded.
 - [ ] The 2 text-only prayers (`vishnu-shantakaram`, `hanuman-manojavam`)
       verified to play correctly in Silent/Chant (no audio expected).
 - [ ] Audio gracefully falls back where absent — no crash, no error.

@@ -3,8 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		AB000000000000000000010B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB00000000000000000000A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AB00000000000000000000B1;
+			remoteInfo = Anjali;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		AB00000000000000000000C1 /* Anjali.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anjali.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -12,7 +22,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		AB00000000000000000000D3 /* Exceptions for "Anjali" folder in "Anjali" target */ = {
+		AB00000000000000000000D3 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -22,19 +32,8 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		AB00000000000000000000D1 /* Anjali */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				AB00000000000000000000D3 /* Exceptions for "Anjali" folder in "Anjali" target */,
-			);
-			path = Anjali;
-			sourceTree = "<group>";
-		};
-		AB00000000000000000000D2 /* AnjaliTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = AnjaliTests;
-			sourceTree = "<group>";
-		};
+		AB00000000000000000000D1 /* Anjali */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AB00000000000000000000D3 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Anjali; sourceTree = "<group>"; };
+		AB00000000000000000000D2 /* AnjaliTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AnjaliTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,7 +145,6 @@
 			);
 			mainGroup = AB00000000000000000000A2;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			productRefGroup = AB00000000000000000000A3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -199,17 +197,97 @@
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXContainerItemProxy section */
-		AB000000000000000000010B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AB00000000000000000000A1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = AB00000000000000000000B1;
-			remoteInfo = Anjali;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin XCBuildConfiguration section */
+		AB00000000000000000001B1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 796XH483R4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Anjali/Info.plist;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.anjali.Anjali;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AB00000000000000000001B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 796XH483R4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Anjali/Info.plist;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.anjali.Anjali;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AB00000000000000000001C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.anjali.AnjaliTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Anjali.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Anjali";
+			};
+			name = Debug;
+		};
+		AB00000000000000000001C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.anjali.AnjaliTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Anjali.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Anjali";
+			};
+			name = Release;
+		};
 		AB00000000000000000001D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -329,106 +407,9 @@
 			};
 			name = Release;
 		};
-		AB00000000000000000001B1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "";
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Anjali/Info.plist;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.anjali.Anjali;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		AB00000000000000000001B2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "";
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Anjali/Info.plist;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.anjali.Anjali;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		AB00000000000000000001C1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.anjali.AnjaliTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Anjali.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Anjali";
-			};
-			name = Debug;
-		};
-		AB00000000000000000001C2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.anjali.AnjaliTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Anjali.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Anjali";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AB00000000000000000001A3 /* Build configuration list for PBXProject "Anjali" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				AB00000000000000000001D1 /* Debug */,
-				AB00000000000000000001D2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		AB00000000000000000001A1 /* Build configuration list for PBXNativeTarget "Anjali" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -443,6 +424,15 @@
 			buildConfigurations = (
 				AB00000000000000000001C1 /* Debug */,
 				AB00000000000000000001C2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AB00000000000000000001A3 /* Build configuration list for PBXProject "Anjali" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB00000000000000000001D1 /* Debug */,
+				AB00000000000000000001D2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -47,3 +47,44 @@ The 20 heroes cover **all nine deities** plus the universal śānti mantras, and
 every Today time band has audio-ready content (dawn, morning, midday via
 before-work/study, sunset, night/sleep). Both text-only prayers have an
 audio-covered sibling for the same deity, so deferring them costs no breadth.
+
+## Current v1 audio status — PROVISIONAL, not shippable
+
+Every file below is a placeholder, not a reviewed human recitation. Both
+sources fail `audio_spec.md` (no pronunciation review, no −16 LUFS pass,
+`digital_temple` tracks also carry AI-generated production/instrumentation
+instead of a clean unaccompanied voice). **All 20 must be replaced with
+reviewed human recordings before App Store submission** — see the blocker in
+`AppStore/RELEASE_CHECKLIST.md` §4.
+
+| id | source | dur | note |
+| --- | --- | --- | --- |
+| `surya-gayatri` | digital_temple (Suno, "traditional") | 28s | reused from a sibling project; not reviewed |
+| `shanti-triple` | macOS TTS (`Lekha`, Hindi) | ~21s | synthesized speech, not sung/chanted |
+| `ganesha-gam` | digital_temple (Suno, "traditional") | 35s | target was 12s; full song length, not a short bīja repeat |
+| `shanti-lokah-samastah` | macOS TTS (`Lekha`, Hindi) | ~14s | synthesized speech, not sung/chanted |
+| `shiva-namah` | digital_temple (Suno, "traditional") | 180s | target was 15s; full ~3min song, not a short mantra |
+| `ganesha-shri` | macOS TTS (`Lekha`, Hindi) | ~10s | synthesized speech, not sung/chanted |
+| `surya-namah` | macOS TTS (`Lekha`, Hindi) | ~13s | synthesized speech, not sung/chanted |
+| `hanuman-namah` | macOS TTS (`Lekha`, Hindi) | ~15s | synthesized speech, not sung/chanted |
+| `saraswati-aim` | macOS TTS (`Lekha`, Hindi) | ~15s | synthesized speech, not sung/chanted |
+| `lakshmi-shrim` | macOS TTS (`Lekha`, Hindi) | ~16s | synthesized speech, not sung/chanted |
+| `devi-dum` | macOS TTS (`Lekha`, Hindi) | ~16s | synthesized speech, not sung/chanted |
+| `vishnu-narayana` | digital_temple (Suno, "traditional") | 113s | target was 20s; full ~2min song, not a short mantra |
+| `krishna-vasudeva` | digital_temple (Suno, "traditional") | 89s | target was 20s; full ~1.5min song, not a short mantra |
+| `shiva-mahamrityunjaya` | macOS TTS (`Lekha`, Hindi) | ~41s | synthesized speech, not sung/chanted |
+| `krishna-mahamantra` | digital_temple (Suno, "traditional") | 22s | good duration fit |
+| `ganesha-vakratunda` | digital_temple (Suno, "traditional") | 19s | good duration fit |
+| `devi-navarna` | macOS TTS (`Lekha`, Hindi) | ~21s | synthesized speech, not sung/chanted |
+| `shanti-asato-ma` | digital_temple (Suno, "traditional") | 26s | good duration fit |
+| `shanti-sarve-bhavantu` | digital_temple (Suno, "traditional") | 22s | good duration fit |
+| `shanti-saha-navavatu` | macOS TTS (`Lekha`, Hindi) | ~26s | synthesized speech, not sung/chanted |
+
+`digital_temple` tracks were copied (not moved) from
+`Documents/Github/digital_temple/digital_temple/digital_temple/Resources/Audio/`,
+a sibling project's Suno-AI-generated devotional music library — the source
+files there are unchanged. `durationSeconds` in `prayers.json` was updated to
+match each swapped track's real length so the UI duration chip and Silent/Chant
+timers stay honest; this pushed four prayers (`ganesha-gam`, `shiva-namah`,
+`vishnu-narayana`, `krishna-vasudeva`) well past their original short
+"sacred pause" target because no short-form match existed in that library.
