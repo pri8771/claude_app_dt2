@@ -1,0 +1,23 @@
+name: Release readiness gate
+
+# The content sign-off gate. Runs on demand and on release tags — deliberately
+# NOT on every push — because it is EXPECTED to block until a named human
+# (cultural / theological) reviewer has signed off every prayer
+# (see CONTENT_GUIDELINES.md). A red run here means "not cleared to ship",
+# which is the correct state until sign-off is recorded in prayers.json.
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  content-signoff:
+    name: Prayer content sign-off gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Require a named-human sign-off on every prayer
+        run: python3 Scripts/validate_prayers.py --require-signoff

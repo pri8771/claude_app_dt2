@@ -15,6 +15,7 @@ Exits non-zero if any problem is found, so it can gate CI.
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -38,12 +39,24 @@ ROTATION_POLICIES = {"dailyAnchor", "rotateOften", "occasional", "festivalSpecif
 REQUIRED_FIELDS = {
     "id", "title", "deity", "moments", "intentions", "timeContexts",
     "durationSeconds", "availableModes", "primaryText", "transliteration",
-    "meaning", "sourceTitle", "audioAssetName", "isReviewed", "needsReview",
-    "isFeatured", "sortOrder", "rotationPolicy",
+    "meaning", "sourceTitle", "provenance", "audioAssetName", "isReviewed",
+    "needsReview", "isFeatured", "sortOrder", "rotationPolicy",
 }
 
+PROVENANCE_FIELDS = {"sourceReference", "reviewer", "reviewedOn"}
+# Placeholder reviewer values that do NOT count as a real human sign-off.
+NON_SIGNOFF_REVIEWERS = {"", "seed", "tbd", "todo", "pending", "n/a", "none"}
+ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
-def validate(path: Path) -> list[str]:
+
+def _is_signed_off(prov: dict) -> bool:
+    """True only when a *named* human recorded a dated sign-off."""
+    reviewer = (prov.get("reviewer") or "").strip().lower()
+    reviewed_on = (prov.get("reviewedOn") or "").strip()
+    return reviewer not in NON_SIGNOFF_REVIEWERS and bool(ISO_DATE.match(reviewed_on))
+
+
+def validate(path: Path, require_signoff: bool = False) -> list[str]:
     errors: list[str] = []
     data = json.loads(path.read_text())
     if not isinstance(data, list):
@@ -91,27 +104,60 @@ def validate(path: Path) -> list[str]:
         if not (prayer.get("primaryText", {}).get("devanagari") or "").strip():
             errors.append(f"{pid}: primaryText.devanagari must not be empty")
 
+        # Provenance: structural checks always run (a citation is mandatory).
+        prov = prayer.get("provenance")
+        if not isinstance(prov, dict):
+            errors.append(f"{pid}: provenance must be an object")
+        else:
+            prov_missing = PROVENANCE_FIELDS - prov.keys()
+            if prov_missing:
+                errors.append(f"{pid}: provenance missing {sorted(prov_missing)}")
+            if not (prov.get("sourceReference") or "").strip():
+                errors.append(f"{pid}: provenance.sourceReference must not be empty")
+            reviewed_on = (prov.get("reviewedOn") or "").strip()
+            if reviewed_on and not ISO_DATE.match(reviewed_on):
+                errors.append(
+                    f"{pid}: provenance.reviewedOn '{reviewed_on}' is not YYYY-MM-DD"
+                )
+            # The release gate: a named human must have signed off.
+            if require_signoff and not _is_signed_off(prov):
+                errors.append(
+                    f"{pid}: NOT signed off — provenance.reviewer/reviewedOn must record "
+                    f"a named human review before release (got reviewer="
+                    f"{prov.get('reviewer')!r})"
+                )
+
     return errors
 
 
 def main() -> int:
+    require_signoff = "--require-signoff" in sys.argv[1:]
     root = Path(__file__).resolve().parent.parent
     path = root / "Anjali" / "Anjali" / "Resources" / "prayers.json"
     if not path.exists():
         print(f"ERROR: {path} not found", file=sys.stderr)
         return 2
 
-    errors = validate(path)
+    mode = "release sign-off gate" if require_signoff else "structural validation"
+    errors = validate(path, require_signoff=require_signoff)
     if errors:
-        print(f"FAILED: {len(errors)} problem(s) in {path.name}:")
+        print(f"FAILED ({mode}): {len(errors)} problem(s) in {path.name}:")
         for err in errors:
             print(f"  - {err}")
+        if require_signoff:
+            print(
+                "\nRelease is BLOCKED until a named human (cultural / theological) "
+                "reviewer signs off every prayer by setting provenance.reviewer and "
+                "provenance.reviewedOn. This gate is intentional — see CONTENT_GUIDELINES.md."
+            )
         return 1
 
     data = json.loads(path.read_text())
     count = len(data)
+    signed = sum(1 for p in data if _is_signed_off(p.get("provenance", {})))
     no_modes = [p.get("id", "?") for p in data if not p.get("availableModes")]
-    print(f"OK: {count} prayers valid in {path.name}")
+    print(f"OK ({mode}): {count} prayers valid in {path.name}")
+    print(f"  human sign-off: {signed}/{count} prayers carry a named-reviewer sign-off")
     if no_modes:
         print(f"  note: {len(no_modes)} with no explicit modes "
               f"(Silent fallback): {', '.join(no_modes)}")

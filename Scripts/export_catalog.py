@@ -56,10 +56,15 @@ def row_for(prayer: dict) -> dict:
         "transliteration": prayer.get("transliteration", ""),
         "meaning": prayer.get("meaning", ""),
         "source_title": prayer.get("sourceTitle", ""),
-        "source_note": "",
+        "source_note": prayer.get("provenance", {}).get("sourceReference", ""),
         "regional_note": "",
-        "reviewer_name": "seed",
-        "review_status": "reviewed" if prayer.get("isReviewed") else "draft",
+        "reviewer_name": prayer.get("provenance", {}).get("reviewer", ""),
+        "review_status": (
+            "human-signed-off"
+            if (prayer.get("provenance", {}).get("reviewer") or "").strip()
+            and (prayer.get("provenance", {}).get("reviewer") or "").strip().lower() != "seed"
+            else "pending-human-review"
+        ),
         "needs_review": str(prayer.get("needsReview", False)).lower(),
         "audio_status": "recorded" if prayer.get("audioAssetName") else "none",
         "audio_asset_name": prayer.get("audioAssetName") or "",
